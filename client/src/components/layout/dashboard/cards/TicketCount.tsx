@@ -12,7 +12,7 @@ const TicketCountCard = () => {
         <Card className="bg-white">
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between p-4 gap-y-4">
                 <p className="text-[#344050] text-sm font-semibold">
-                    Unresolved Tickets by Priority
+                    Number of Tickets
                 </p>
                 <div className="flex flex-col sm:flex-row gap-2">
                     <div className="flex flex-row gap-5">
@@ -50,7 +50,7 @@ const TicketCountCard = () => {
                 </div>
             </div>
             <div className="h-px bg-gray-100 rounded-full" />
-            <div className="flex flex-col p-4 gap-y-2 overflow-x-scroll [&&::-webkit-scrollbar]:hidden">
+            <div className="flex flex-col p-4 gap-y-2 overflow-x-scroll [&::-webkit-scrollbar]:hidden">
                 <div className="flex flex-row items-center gap-x-3">
                     <div className="flex flex-col min-w-30 w-30">
                         <p className="text-xl font-semibold">
