@@ -4,8 +4,7 @@ import { getSession, signIn, signOut } from "next-auth/react";
 // Types
 interface User {
     id: string;
-    firstName: string;
-    lastName: string;
+    name: string;
     email: string;
     image?: string; // Add profile picture
     provider?: string; // Add provider info
@@ -17,8 +16,6 @@ interface ExtendedSessionUser {
     name?: string | null;
     email?: string | null;
     image?: string | null;
-    firstName?: string;
-    lastName?: string;
 }
 
 interface AuthState {
@@ -100,45 +97,9 @@ export const loginWithOAuth = createAsyncThunk(
                 );
             }
 
-            // Helper function to split full name into first and last name
-            const splitName = (fullName: string) => {
-                const nameParts = fullName.trim().split(" ");
-                const firstName = nameParts[0] || "";
-                const lastName = nameParts.slice(1).join(" ") || "";
-                return { firstName, lastName };
-            };
-
-            // Define interface for legacy sessions that might have 'name' instead of firstName/lastName
-            interface LegacySessionUser {
-                id: string;
-                name?: string;
-                firstName?: string;
-                lastName?: string;
-                email: string;
-                image?: string;
-            }
-
-            const sessionUser = session.user as LegacySessionUser;
-
-            // Handle both old sessions (with name) and new sessions (with firstName/lastName)
-            let firstName = "";
-            let lastName = "";
-
-            if (sessionUser.name && !sessionUser.firstName) {
-                // Legacy session - split the name
-                const nameData = splitName(sessionUser.name || "");
-                firstName = nameData.firstName;
-                lastName = nameData.lastName;
-            } else {
-                // New session format
-                firstName = sessionUser.firstName || "";
-                lastName = sessionUser.lastName || "";
-            }
-
             const user: User = {
                 id: session.user.id || session.user.email || "",
-                firstName,
-                lastName,
+                name: session.user.name || "",
                 email: session.user.email || "",
                 image: (session.user as ExtendedSessionUser).image || "", // Include profile picture
                 provider: session.provider,
@@ -173,49 +134,13 @@ export const checkAuth = createAsyncThunk(
     "auth/checkAuth",
     async (_, { rejectWithValue }) => {
         try {
-            // First check NextAuth session (for OAuth users)
+            // Check NextAuth session
             const session = await getSession();
 
             if (session?.user) {
-                // Helper function to split full name into first and last name
-                const splitName = (fullName: string) => {
-                    const nameParts = fullName.trim().split(" ");
-                    const firstName = nameParts[0] || "";
-                    const lastName = nameParts.slice(1).join(" ") || "";
-                    return { firstName, lastName };
-                };
-
-                // Define interface for legacy sessions that might have 'name' instead of firstName/lastName
-                interface LegacySessionUser {
-                    id: string;
-                    name?: string;
-                    firstName?: string;
-                    lastName?: string;
-                    email: string;
-                    image?: string;
-                }
-
-                const sessionUser = session.user as LegacySessionUser;
-
-                // Handle both old sessions (with name) and new sessions (with firstName/lastName)+
-                let firstName = "";
-                let lastName = "";
-
-                if (sessionUser.name && !sessionUser.firstName) {
-                    // Legacy session - split the name
-                    const nameData = splitName(sessionUser.name || "");
-                    firstName = nameData.firstName;
-                    lastName = nameData.lastName;
-                } else {
-                    // New session format
-                    firstName = sessionUser.firstName || "";
-                    lastName = sessionUser.lastName || "";
-                }
-
                 const user: User = {
                     id: session.user.id,
-                    firstName,
-                    lastName,
+                    name: session.user.name || "",
                     email: session.user.email,
                     image: (session.user as ExtendedSessionUser).image || "", // Include profile picture
                     provider: session.provider,

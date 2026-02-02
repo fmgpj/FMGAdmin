@@ -36,14 +36,16 @@ export default function ProfileAvatar({
 
     if (!user) return null;
 
-    const getInitials = (firstName: string, lastName: string) => {
-        const firstInitial = firstName.charAt(0).toUpperCase();
-        const lastInitial = lastName.charAt(0).toUpperCase();
+    const getInitials = (fullName: string) => {
+        const names = fullName.trim().split(" ");
+        const firstInitial = names[0]?.charAt(0).toUpperCase() || "";
+        const lastInitial =
+            names[names.length - 1]?.charAt(0).toUpperCase() || "";
         return firstInitial + lastInitial;
     };
 
     const getDisplayName = () => {
-        return `${user.firstName} ${user.lastName}`.trim();
+        return user.name.trim();
     };
 
     return (
@@ -67,7 +69,7 @@ export default function ProfileAvatar({
                     <span
                         className={`${textSizes[size]} font-medium text-gray-600`}
                     >
-                        {getInitials(user.firstName, user.lastName)}
+                        {getInitials(user.name)}
                     </span>
                 )}
             </div>

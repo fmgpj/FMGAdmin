@@ -43,25 +43,15 @@ const handler = NextAuth({
     callbacks: {
         async jwt({ token, account, user }) {
             try {
-                // Helper function to split full name into first and last name
-                const splitName = (fullName: string) => {
-                    const nameParts = fullName.trim().split(" ");
-                    const firstName = nameParts[0] || "";
-                    const lastName = nameParts.slice(1).join(" ") || "";
-                    return { firstName, lastName };
-                };
-
                 // Persist the OAuth access_token to the token right after signin
                 if (account) {
                     token.accessToken = account.access_token;
                     token.provider = account.provider;
                 }
                 if (user) {
-                    const nameData = splitName(user.name || "");
                     token.user = {
                         id: user.id || token.sub || "",
-                        firstName: nameData.firstName,
-                        lastName: nameData.lastName,
+                        name: user.name || "",
                         email: user.email || "",
                         image: user.image || "", // Include profile picture
                     };
@@ -79,8 +69,7 @@ const handler = NextAuth({
                 session.provider = token.provider as string;
                 session.user = {
                     id: token.user?.id || token.sub || "",
-                    firstName: token.user?.firstName || "",
-                    lastName: token.user?.lastName || "",
+                    name: token.user?.name || "",
                     email: token.user?.email || "",
                     image: token.user?.image || "", // Include profile picture
                 };
