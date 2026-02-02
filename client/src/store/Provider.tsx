@@ -12,6 +12,7 @@ function AuthInitializer({ children }: { children: React.ReactNode }) {
 
     useEffect(() => {
         // Mark as hydrated and check auth only after component mounts
+        // Now relies on NextAuth secure session cookies instead of localStorage
         setMounted(true);
         store.dispatch(setHydrated());
         store.dispatch(checkAuth());

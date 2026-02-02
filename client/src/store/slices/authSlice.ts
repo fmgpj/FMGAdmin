@@ -60,9 +60,7 @@ export const loginUser = createAsyncThunk(
 
             const data = await response.json();
 
-            // Save to localStorage
-            localStorage.setItem("user", JSON.stringify(data.user));
-
+            // User data is automatically stored in secure NextAuth session cookies
             return data.user;
         } catch (error) {
             return rejectWithValue("Network error occurred: " + error);
@@ -146,9 +144,7 @@ export const loginWithOAuth = createAsyncThunk(
                 provider: session.provider,
             };
 
-            // Save to localStorage for consistency with existing logic
-            localStorage.setItem("user", JSON.stringify(user));
-
+            // User data is automatically stored in secure NextAuth session cookies
             return user;
         } catch (error) {
             return rejectWithValue("OAuth login error: " + error);
@@ -161,11 +157,8 @@ export const logoutWithOAuth = createAsyncThunk(
     "auth/logoutWithOAuth",
     async (_, { rejectWithValue }) => {
         try {
-            // Use NextAuth signOut
+            // Use NextAuth signOut (automatically clears secure session cookies)
             await signOut({ redirect: false });
-
-            // Clear localStorage
-            localStorage.removeItem("user");
 
             return null;
         } catch (error) {
@@ -175,7 +168,7 @@ export const logoutWithOAuth = createAsyncThunk(
 );
 
 // Async thunk to check existing authentication
-// Updated to check both localStorage and NextAuth session
+// Uses NextAuth session as the source of truth (secure cookies)
 export const checkAuth = createAsyncThunk(
     "auth/checkAuth",
     async (_, { rejectWithValue }) => {
@@ -228,8 +221,7 @@ export const checkAuth = createAsyncThunk(
                     provider: session.provider,
                 };
 
-                // Sync with localStorage
-                localStorage.setItem("user", JSON.stringify(user));
+                // User data is stored securely in NextAuth session cookies
                 return user;
             }
 
@@ -263,7 +255,7 @@ const authSlice = createSlice({
             state.user = null;
             state.isAuthenticated = false;
             state.error = null;
-            localStorage.removeItem("user");
+            // NextAuth will handle clearing secure session cookies
         },
         // Clear any error messages
         clearError: (state) => {
@@ -277,7 +269,7 @@ const authSlice = createSlice({
         updateUser: (state, action: PayloadAction<Partial<User>>) => {
             if (state.user) {
                 state.user = { ...state.user, ...action.payload };
-                localStorage.setItem("user", JSON.stringify(state.user));
+                // User data changes will be reflected in NextAuth session
             }
         },
     },

@@ -22,7 +22,20 @@ const handler = NextAuth({
     session: {
         strategy: "jwt",
         maxAge: 24 * 60 * 60, // 24 hours
+        updateAge: 60 * 60, // Update session every hour for security
     },
+    cookies: {
+        sessionToken: {
+            name: "next-auth.session-token",
+            options: {
+                httpOnly: true, // Prevent XSS access to session token
+                sameSite: "lax", // CSRF protection
+                path: "/",
+                secure: process.env.NODE_ENV === "production", // HTTPS only in production
+            },
+        },
+    },
+    useSecureCookies: process.env.NODE_ENV === "production",
     pages: {
         signIn: "/", // Redirect to your login page
         error: "/", // Redirect errors to login page
