@@ -3,27 +3,41 @@
 import { faGoogle, faMicrosoft } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useAuth } from "@src/store/hooks";
-import { clearError, loginUser } from "@src/store/slices/authSlice";
+import { clearError, loginWithOAuth } from "@src/store/slices/authSlice";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 const LoginForm = () => {
-    const { error, dispatch } = useAuth();
+    const { error, loading, isAuthenticated, dispatch } = useAuth();
+    const router = useRouter();
 
-    const handleGoogleLogin = () => {
-        // Implement Google OAuth here
-        console.log("Google login clicked");
+    // Redirect if already authenticated
+    useEffect(() => {
+        if (isAuthenticated) {
+            router.push("/"); // Adjust path as needed
+        }
+    }, [isAuthenticated, router]);
+
+    const handleGoogleLogin = async () => {
         dispatch(clearError());
-        dispatch(
-            loginUser({ email: "admin@fmg.com", password: "password123" })
-        );
+        try {
+            await dispatch(loginWithOAuth("google")).unwrap();
+            // Navigation will be handled by useEffect above
+        } catch (error) {
+            // Error is handled by Redux state
+            console.error("Google login failed:", error);
+        }
     };
 
-    const handleMicrosoftLogin = () => {
-        // Implement Microsoft OAuth here
-        console.log("Microsoft login clicked");
+    const handleMicrosoftLogin = async () => {
         dispatch(clearError());
-        dispatch(
-            loginUser({ email: "admin@fmg.com", password: "password123" })
-        );
+        try {
+            await dispatch(loginWithOAuth("azure-ad")).unwrap();
+            // Navigation will be handled by useEffect above
+        } catch (error) {
+            // Error is handled by Redux state
+            console.error("Microsoft login failed:", error);
+        }
     };
 
     return (
@@ -44,29 +58,31 @@ const LoginForm = () => {
                     <div className="bg-red-50 border border-red-200 rounded-md p-3">
                         <p className="text-sm text-red-600">{error}</p>
                     </div>
-                )}
+                )} 
                 <div className="flex flex-col gap-y-2">
                     <p className="text-sm">Sign in with:</p>
                     <div className="flex flex-row gap-x-2 items-center">
                         <button
                             type="button"
                             onClick={handleGoogleLogin}
-                            className="w-full px-4 py-2 bg-[#F12727] text-white rounded-full transition-colors text-sm hover:bg-[#d91e1e]"
+                            disabled={loading}
+                            className="w-full px-4 py-2 bg-[#F12727] text-white rounded-full transition-colors text-sm hover:bg-[#d91e1e] disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             <FontAwesomeIcon icon={faGoogle} className="mr-2" />
-                            Google
+                            {loading ? "Signing in..." : "Google"}
                         </button>
                         <p className="text-xs">OR</p>
                         <button
                             type="button"
                             onClick={handleMicrosoftLogin}
-                            className="w-full px-4 py-2 bg-[#0067b8] text-white rounded-full transition-colors text-sm hover:bg-[#005494]"
+                            disabled={loading}
+                            className="w-full px-4 py-2 bg-[#0067b8] text-white rounded-full transition-colors text-sm hover:bg-[#005494] disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             <FontAwesomeIcon
                                 icon={faMicrosoft}
                                 className="mr-2"
                             />
-                            Microsoft
+                            {loading ? "Signing in..." : "Microsoft"}
                         </button>
                     </div>
                 </div>

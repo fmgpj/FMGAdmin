@@ -1,10 +1,24 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { getSession, signIn, signOut } from "next-auth/react";
 
 // Types
 interface User {
     id: string;
-    name: string;
+    firstName: string;
+    lastName: string;
     email: string;
+    image?: string; // Add profile picture
+    provider?: string; // Add provider info
+}
+
+// Extended session user type for NextAuth
+interface ExtendedSessionUser {
+    id?: string;
+    name?: string | null;
+    email?: string | null;
+    image?: string | null;
+    firstName?: string;
+    lastName?: string;
 }
 
 interface AuthState {
@@ -56,20 +70,185 @@ export const loginUser = createAsyncThunk(
     }
 );
 
+// Async thunk for OAuth login (Google/Microsoft)
+export const loginWithOAuth = createAsyncThunk(
+    "auth/loginWithOAuth",
+    async (provider: "google" | "azure-ad", { rejectWithValue }) => {
+        try {
+            // Use NextAuth signIn
+            const result = await signIn(provider, {
+                redirect: false, // Don't redirect, handle in component
+                callbackUrl: "/",
+            });
+
+            if (result?.error) {
+                return rejectWithValue(`OAuth login failed: ${result.error}`);
+            }
+
+            // Wait a bit for session to be established
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+
+            // Try to get session multiple times with backoff
+            let session = null;
+            for (let i = 0; i < 5; i++) {
+                session = await getSession();
+                if (session?.user) break;
+                await new Promise((resolve) => setTimeout(resolve, 500));
+            }
+
+            if (!session?.user) {
+                return rejectWithValue(
+                    "Unable to establish session. Please try again."
+                );
+            }
+
+            // Helper function to split full name into first and last name
+            const splitName = (fullName: string) => {
+                const nameParts = fullName.trim().split(" ");
+                const firstName = nameParts[0] || "";
+                const lastName = nameParts.slice(1).join(" ") || "";
+                return { firstName, lastName };
+            };
+
+            // Define interface for legacy sessions that might have 'name' instead of firstName/lastName
+            interface LegacySessionUser {
+                id: string;
+                name?: string;
+                firstName?: string;
+                lastName?: string;
+                email: string;
+                image?: string;
+            }
+
+            const sessionUser = session.user as LegacySessionUser;
+
+            // Handle both old sessions (with name) and new sessions (with firstName/lastName)
+            let firstName = "";
+            let lastName = "";
+
+            if (sessionUser.name && !sessionUser.firstName) {
+                // Legacy session - split the name
+                const nameData = splitName(sessionUser.name || "");
+                firstName = nameData.firstName;
+                lastName = nameData.lastName;
+            } else {
+                // New session format
+                firstName = sessionUser.firstName || "";
+                lastName = sessionUser.lastName || "";
+            }
+
+            const user: User = {
+                id: session.user.id || session.user.email || "",
+                firstName,
+                lastName,
+                email: session.user.email || "",
+                image: (session.user as ExtendedSessionUser).image || "", // Include profile picture
+                provider: session.provider,
+            };
+
+            // Save to localStorage for consistency with existing logic
+            localStorage.setItem("user", JSON.stringify(user));
+
+            return user;
+        } catch (error) {
+            return rejectWithValue("OAuth login error: " + error);
+        }
+    }
+);
+
+// Async thunk for OAuth logout
+export const logoutWithOAuth = createAsyncThunk(
+    "auth/logoutWithOAuth",
+    async (_, { rejectWithValue }) => {
+        try {
+            // Use NextAuth signOut
+            await signOut({ redirect: false });
+
+            // Clear localStorage
+            localStorage.removeItem("user");
+
+            return null;
+        } catch (error) {
+            return rejectWithValue("OAuth logout error: " + error);
+        }
+    }
+);
+
 // Async thunk to check existing authentication
-// This runs on app startup to check if user is already logged in
+// Updated to check both localStorage and NextAuth session
 export const checkAuth = createAsyncThunk(
     "auth/checkAuth",
     async (_, { rejectWithValue }) => {
         try {
-            const savedUser = localStorage.getItem("user");
-            if (savedUser) {
-                return JSON.parse(savedUser);
+            // First check NextAuth session (for OAuth users)
+            const session = await getSession();
+
+            if (session?.user) {
+                // Helper function to split full name into first and last name
+                const splitName = (fullName: string) => {
+                    const nameParts = fullName.trim().split(" ");
+                    const firstName = nameParts[0] || "";
+                    const lastName = nameParts.slice(1).join(" ") || "";
+                    return { firstName, lastName };
+                };
+
+                // Define interface for legacy sessions that might have 'name' instead of firstName/lastName
+                interface LegacySessionUser {
+                    id: string;
+                    name?: string;
+                    firstName?: string;
+                    lastName?: string;
+                    email: string;
+                    image?: string;
+                }
+
+                const sessionUser = session.user as LegacySessionUser;
+
+                // Handle both old sessions (with name) and new sessions (with firstName/lastName)+
+                let firstName = "";
+                let lastName = "";
+
+                if (sessionUser.name && !sessionUser.firstName) {
+                    // Legacy session - split the name
+                    const nameData = splitName(sessionUser.name || "");
+                    firstName = nameData.firstName;
+                    lastName = nameData.lastName;
+                } else {
+                    // New session format
+                    firstName = sessionUser.firstName || "";
+                    lastName = sessionUser.lastName || "";
+                }
+
+                const user: User = {
+                    id: session.user.id,
+                    firstName,
+                    lastName,
+                    email: session.user.email,
+                    image: (session.user as ExtendedSessionUser).image || "", // Include profile picture
+                    provider: session.provider,
+                };
+
+                // Sync with localStorage
+                localStorage.setItem("user", JSON.stringify(user));
+                return user;
             }
+
+            // For traditional login users, check server-side session
+            const sessionResponse = await fetch("/api/auth/session", {
+                method: "GET",
+                credentials: "include", // Include cookies
+            });
+
+            if (sessionResponse.ok) {
+                const sessionData = await sessionResponse.json();
+                if (sessionData.user) {
+                    return sessionData.user;
+                }
+            }
+
             return null;
         } catch (error) {
-            localStorage.removeItem("user"); // Clean up corrupted data
-            return rejectWithValue("Invalid stored user data: " + error);
+            return rejectWithValue("Auth check failed: " + error);
         }
     }
 );
@@ -143,12 +322,50 @@ const authSlice = createSlice({
                 state.isAuthenticated = false;
                 state.error = null; // Don't show error for failed auth check
             });
+
+        // Handle loginWithOAuth async thunk
+        builder
+            .addCase(loginWithOAuth.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(loginWithOAuth.fulfilled, (state, action) => {
+                state.loading = false;
+                state.user = action.payload;
+                state.isAuthenticated = true;
+                state.error = null;
+            })
+            .addCase(loginWithOAuth.rejected, (state, action) => {
+                state.loading = false;
+                state.user = null;
+                state.isAuthenticated = false;
+                state.error = action.payload as string;
+            });
+
+        // Handle logoutWithOAuth async thunk
+        builder
+            .addCase(logoutWithOAuth.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(logoutWithOAuth.fulfilled, (state) => {
+                state.loading = false;
+                state.user = null;
+                state.isAuthenticated = false;
+                state.error = null;
+            })
+            .addCase(logoutWithOAuth.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload as string;
+            });
     },
 });
 
 // Export actions
 export const { logout, clearError, updateUser, setHydrated } =
     authSlice.actions;
+
+// Export the new OAuth thunks
+// Note: loginWithOAuth and logoutWithOAuth are already exported at their declaration
 
 // Export reducer
 export default authSlice.reducer;

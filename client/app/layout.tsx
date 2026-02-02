@@ -1,3 +1,4 @@
+import NextAuthProvider from "@src/components/providers/NextAuthProvider";
 import { ReduxProvider } from "@src/store/Provider";
 import type { Metadata } from "next";
 import "./globals.css";
@@ -104,9 +105,11 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body className="antialiased bg-[#edf2f9] overflow-hidden">
-                <ReduxProvider>
-                    <ConditionalLayout>{children}</ConditionalLayout>
-                </ReduxProvider>
+                <NextAuthProvider>
+                    <ReduxProvider>
+                        <ConditionalLayout>{children}</ConditionalLayout>
+                    </ReduxProvider>
+                </NextAuthProvider>
             </body>
         </html>
     );

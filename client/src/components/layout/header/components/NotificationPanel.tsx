@@ -14,7 +14,7 @@ const NotificationPanel = ({
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
             if (
-                dropdownRef.current &&
+                dropdownRef?.current &&
                 !dropdownRef.current.contains(event.target as Node)
             ) {
                 setDropdownOpen(false);
@@ -172,7 +172,8 @@ const NotificationPanel = ({
                 )}
 
                 {/* Empty State */}
-                {notifications && notifications.new.length === 0 &&
+                {notifications &&
+                    notifications.new.length === 0 &&
                     notifications.earlier.length === 0 && (
                         <div className="px-4 py-8 text-center text-gray-500">
                             <FontAwesomeIcon

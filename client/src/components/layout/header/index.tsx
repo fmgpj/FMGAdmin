@@ -8,10 +8,10 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useTheme } from "@src/store/hooks";
-import Image from "next/image";
 import { useRef, useState } from "react";
 
 import Profile from "@public/images/profile.jpg";
+import ProfileAvatar from "@src/components/ui/ProfileAvatar";
 import { toggleTheme } from "@src/store/slices/themeSlice";
 import NotificationPanel from "./components/NotificationPanel";
 import ProfileMenu from "./components/ProfilePanel";
@@ -87,9 +87,7 @@ export default function Header() {
                         />
                     </button>
                     {sidebarOpen && (
-                        <SidebarPanel
-                            setDropdownOpen={setSidebarOpen}
-                        />
+                        <SidebarPanel setDropdownOpen={setSidebarOpen} />
                     )}
                 </div>
                 <h2 className="text-2xl font-bold text-[#BE9F44]">
@@ -136,14 +134,7 @@ export default function Header() {
                         onClick={() => setProfileOpen(!profileOpen)}
                         className="relative p-1"
                     >
-                        <Image
-                            src={Profile}
-                            loading="eager"
-                            alt="Profile"
-                            width={32}
-                            height={32}
-                            className="rounded-full"
-                        />
+                        <ProfileAvatar size="sm" />
                     </button>
                     {profileOpen && (
                         <ProfileMenu

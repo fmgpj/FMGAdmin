@@ -1,20 +1,15 @@
-import { useEffect } from "react";
+import { faCog, faSignOutAlt, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-    faCog,
-    faSignOutAlt,
-    faUser,
-} from "@fortawesome/free-solid-svg-icons";
+import { useEffect } from "react";
 
-import { useAuth } from "@src/store/hooks";
-import { logout } from "@src/store/slices/authSlice";
+import { useLogout } from "@src/hooks/useLogout";
 import { DropdownPanelProps } from "../types";
 
 const ProfilePanel = ({ dropdownRef, setDropdownOpen }: DropdownPanelProps) => {
-    const { dispatch } = useAuth();
+    const { handleLogout } = useLogout();
 
-    const handleLogout = () => {
-        dispatch(logout());
+    const onLogout = async () => {
+        await handleLogout("/"); // Redirect to login page after logout
         setDropdownOpen(false);
     };
 
@@ -22,6 +17,7 @@ const ProfilePanel = ({ dropdownRef, setDropdownOpen }: DropdownPanelProps) => {
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
             if (
+                dropdownRef &&
                 dropdownRef.current &&
                 !dropdownRef.current.contains(event.target as Node)
             ) {
@@ -49,13 +45,29 @@ const ProfilePanel = ({ dropdownRef, setDropdownOpen }: DropdownPanelProps) => {
         {
             icon: faSignOutAlt,
             label: "Logout",
-            action: handleLogout,
+            action: onLogout,
             className: "text-red-500 border-t border-gray-200",
         },
     ];
-    
+
     return (
         <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
+            {/* User Info Header */}
+            {/* {user && (
+                <div className="px-4 border-b border-gray-100">
+                    <ProfileAvatar size="md" showName className="mb-1" />
+                    <p className="text-xs text-gray-500">{user.email}</p>
+                    {user.provider && (
+                        <span className="inline-flex items-center px-2 rounded text-xs bg-blue-50 text-blue-700 mt-1">
+                            {user.provider === "azure-ad"
+                                ? "Microsoft"
+                                : user.provider}
+                        </span>
+                    )}
+                </div>
+            )} */}
+
+            {/* Menu Items */}
             {dropdownItems.map((item, index) => (
                 <button
                     type="button"
