@@ -23,10 +23,10 @@ export default function DashboardPage() {
                 </div>
             </div>
             <div className="flex flex-col gap-4 lg:flex-row">
-                <div className="grow lg:w-3/4">
+                <div className="grow lg:w-7/12">
                     <TicketCountCard />
                 </div>
-                <div className="grow lg:w-1/4">
+                <div className="grow lg:w-5/12">
                     <CustomerSatisfactionCard />
                 </div>
             </div>
