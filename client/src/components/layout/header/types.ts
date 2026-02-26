@@ -17,7 +17,6 @@ type Notification = {
 
 export interface DropdownPanelProps {
     dropdownRef?: RefObject<HTMLDivElement | null>;
-    dropdownOpen?: boolean;
     setDropdownOpen: (open: boolean) => void;
     notifications?: {
         new: Notification[];

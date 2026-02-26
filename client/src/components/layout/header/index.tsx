@@ -7,12 +7,12 @@ import {
     faSun,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useTheme } from "@src/store/hooks";
 import { useRef, useState } from "react";
 
+import ProfileAvatar from "@/src/components/ui/avatar/ProfileAvatar";
+import { useAppDispatch, useAppSelector } from "@/src/redux";
+import { toggleTheme } from "@/src/redux/slices/theme";
 import Profile from "@public/images/profile.jpg";
-import ProfileAvatar from "@src/components/ui/ProfileAvatar";
-import { toggleTheme } from "@src/store/slices/themeSlice";
 import NotificationPanel from "./components/NotificationPanel";
 import ProfileMenu from "./components/ProfilePanel";
 import SidebarPanel from "./components/SidebarPanel";
@@ -59,7 +59,8 @@ const notifications = {
 };
 
 export default function Header() {
-    const { mode, dispatch } = useTheme();
+    const { isDarkModeActivated, currentTheme } = useAppSelector((state) => state.theme);
+    const dispatch = useAppDispatch();
     const profileRef = useRef<HTMLDivElement>(null);
     const notificationRef = useRef<HTMLDivElement>(null);
     const sidebarRef = useRef<HTMLDivElement>(null);
@@ -97,7 +98,7 @@ export default function Header() {
             <div className="flex flex-row items-center grow justify-end gap-x-2">
                 <button type="button" onClick={handleToggleTheme}>
                     <FontAwesomeIcon
-                        icon={mode === "light" ? faMoon : faSun}
+                        icon={isDarkModeActivated ? faMoon : faSun}
                         color="#6c6e71"
                         className="hover:text-[#47494a] ease-in-out transition-all"
                     />

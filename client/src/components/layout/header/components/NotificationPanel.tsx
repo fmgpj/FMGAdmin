@@ -33,7 +33,13 @@ const NotificationPanel = ({
     };
 
     return (
-        <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg border border-gray-200 z-50 max-h-96 overflow-hidden">
+        <div
+            className="absolute right-0 mt-2 bg-white rounded-lg shadow-lg border border-gray-200 z-50 max-h-96 overflow-hidden
+                        w-80 max-w-[calc(100vw-2rem)] 
+                        sm:w-80 sm:max-w-80
+                        md:w-96 md:max-w-96
+                        lg:w-80 lg:max-w-80"
+        >
             {/* Header */}
             <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200">
                 <h3 className="font-semibold text-gray-900">Notifications</h3>
