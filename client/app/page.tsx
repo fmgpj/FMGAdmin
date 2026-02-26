@@ -1,10 +1,10 @@
 "use client";
+import { useAppSelector } from "@/src/redux";
 import LoginForm from "@src/components/forms/LoginForm";
 import DashboardPage from "@src/components/layout/dashboard";
-import { useAuth } from "@src/store/hooks";
 
 export default function Home() {
-    const { isAuthenticated, loading } = useAuth();
+    const { isAuthenticated, loading } = useAppSelector((state) => state.auth);
 
     // Show loading spinner while checking authentication
     if (loading) {

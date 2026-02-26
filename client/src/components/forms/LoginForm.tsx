@@ -1,14 +1,18 @@
 "use client";
 
+import { useAppDispatch, useAppSelector } from "@/src/redux";
+import { clearError, loginWithOAuth } from "@/src/redux/slices/auth";
 import { faGoogle, faMicrosoft } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useAuth } from "@src/store/hooks";
-import { clearError, loginWithOAuth } from "@src/store/slices/authSlice";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 const LoginForm = () => {
-    const { error, loading, isAuthenticated, dispatch } = useAuth();
+    const { isAuthenticated, loading, error } = useAppSelector(
+        (state) => state.auth
+    );
+    const dispatch = useAppDispatch();
+    // const { error, loading, isAuthenticated, dispatch } = useAuth();
     const router = useRouter();
 
     // Redirect if already authenticated
@@ -41,7 +45,7 @@ const LoginForm = () => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-start max-w-sm mx-auto">
+        <div className="min-h-screen flex items-center justify-start max-w-sm mx-auto px-4">
             <div className="flex flex-col gap-y-9 w-full">
                 <div className="flex flex-col">
                     <h2 className="text-2xl font-bold text-[#BE9F44]">
@@ -58,7 +62,7 @@ const LoginForm = () => {
                     <div className="bg-red-50 border border-red-200 rounded-md p-3">
                         <p className="text-sm text-red-600">{error}</p>
                     </div>
-                )} 
+                )}
                 <div className="flex flex-col gap-y-2">
                     <p className="text-sm">Sign in with:</p>
                     <div className="flex flex-row gap-x-2 items-center">

@@ -1,21 +1,12 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getSession, signIn, signOut } from "next-auth/react";
 
-// Types
 interface User {
     id: string;
     name: string;
     email: string;
-    image?: string; // Add profile picture
-    provider?: string; // Add provider info
-}
-
-// Extended session user type for NextAuth
-interface ExtendedSessionUser {
-    id?: string;
-    name?: string | null;
-    email?: string | null;
-    image?: string | null;
+    image?: string | "";
+    provider?: string;
 }
 
 interface AuthState {
@@ -23,67 +14,30 @@ interface AuthState {
     isAuthenticated: boolean;
     loading: boolean;
     error: string | null;
-    hydrated: boolean; // Track if we've hydrated on client
+    hydrated: boolean;
 }
 
-// Initial state
 const initialState: AuthState = {
     user: null,
     isAuthenticated: false,
-    loading: false, // Start with false to prevent hydration mismatch
+    loading: false,
     error: null,
-    hydrated: false, // Start with false
+    hydrated: false,
 };
 
-// Async thunk for login
-// This handles the API call for authentication
-export const loginUser = createAsyncThunk(
-    "auth/login", // Action type
-    async (
-        credentials: { email: string; password: string },
-        { rejectWithValue }
-    ) => {
-        try {
-            const response = await fetch("/api/auth", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(credentials),
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                return rejectWithValue(errorData.message || "Login failed");
-            }
-
-            const data = await response.json();
-
-            // User data is automatically stored in secure NextAuth session cookies
-            return data.user;
-        } catch (error) {
-            return rejectWithValue("Network error occurred: " + error);
-        }
-    }
-);
-
-// Async thunk for OAuth login (Google/Microsoft)
 export const loginWithOAuth = createAsyncThunk(
     "auth/loginWithOAuth",
     async (provider: "google" | "azure-ad", { rejectWithValue }) => {
         try {
-            // Use NextAuth signIn
             const result = await signIn(provider, {
-                redirect: false, // Don't redirect, handle in component
+                redirect: false,
                 callbackUrl: "/",
             });
 
-            if (result?.error) {
+            if (result?.error)
                 return rejectWithValue(`OAuth login failed: ${result.error}`);
-            }
-
-            // Wait a bit for session to be established
             await new Promise((resolve) => setTimeout(resolve, 1000));
 
-            // Try to get session multiple times with backoff
             let session = null;
             for (let i = 0; i < 5; i++) {
                 session = await getSession();
@@ -91,21 +45,19 @@ export const loginWithOAuth = createAsyncThunk(
                 await new Promise((resolve) => setTimeout(resolve, 500));
             }
 
-            if (!session?.user) {
+            if (!session?.user)
                 return rejectWithValue(
-                    "Unable to establish session. Please try again."
+                    "Unable to establish session. Please try again!"
                 );
-            }
 
             const user: User = {
                 id: session.user.id || session.user.email || "",
                 name: session.user.name || "",
                 email: session.user.email || "",
-                image: (session.user as ExtendedSessionUser).image || "", // Include profile picture
+                image: session.user.image || "",
                 provider: session.provider,
             };
 
-            // User data is automatically stored in secure NextAuth session cookies
             return user;
         } catch (error) {
             return rejectWithValue("OAuth login error: " + error);
@@ -113,14 +65,11 @@ export const loginWithOAuth = createAsyncThunk(
     }
 );
 
-// Async thunk for OAuth logout
 export const logoutWithOAuth = createAsyncThunk(
     "auth/logoutWithOAuth",
     async (_, { rejectWithValue }) => {
         try {
-            // Use NextAuth signOut (automatically clears secure session cookies)
             await signOut({ redirect: false });
-
             return null;
         } catch (error) {
             return rejectWithValue("OAuth logout error: " + error);
@@ -128,13 +77,10 @@ export const logoutWithOAuth = createAsyncThunk(
     }
 );
 
-// Async thunk to check existing authentication
-// Uses NextAuth session as the source of truth (secure cookies)
 export const checkAuth = createAsyncThunk(
     "auth/checkAuth",
     async (_, { rejectWithValue }) => {
         try {
-            // Check NextAuth session
             const session = await getSession();
 
             if (session?.user) {
@@ -142,25 +88,21 @@ export const checkAuth = createAsyncThunk(
                     id: session.user.id,
                     name: session.user.name || "",
                     email: session.user.email,
-                    image: (session.user as ExtendedSessionUser).image || "", // Include profile picture
+                    image: session.user.image || "",
                     provider: session.provider,
                 };
 
-                // User data is stored securely in NextAuth session cookies
                 return user;
             }
 
-            // For traditional login users, check server-side session
             const sessionResponse = await fetch("/api/auth/session", {
                 method: "GET",
-                credentials: "include", // Include cookies
+                credentials: "include",
             });
 
             if (sessionResponse.ok) {
                 const sessionData = await sessionResponse.json();
-                if (sessionData.user) {
-                    return sessionData.user;
-                }
+                if (sessionData.user) return sessionData.user;
             }
 
             return null;
@@ -170,55 +112,23 @@ export const checkAuth = createAsyncThunk(
     }
 );
 
-// The slice - contains reducers and actions
 const authSlice = createSlice({
     name: "auth",
     initialState,
     reducers: {
-        // Synchronous logout action
         logout: (state) => {
             state.user = null;
             state.isAuthenticated = false;
             state.error = null;
-            // NextAuth will handle clearing secure session cookies
         },
-        // Clear any error messages
         clearError: (state) => {
             state.error = null;
         },
-        // Set hydrated status
         setHydrated: (state) => {
             state.hydrated = true;
         },
-        // Manual user update (if needed)
-        updateUser: (state, action: PayloadAction<Partial<User>>) => {
-            if (state.user) {
-                state.user = { ...state.user, ...action.payload };
-                // User data changes will be reflected in NextAuth session
-            }
-        },
     },
     extraReducers: (builder) => {
-        // Handle loginUser async thunk
-        builder
-            .addCase(loginUser.pending, (state) => {
-                state.loading = true;
-                state.error = null;
-            })
-            .addCase(loginUser.fulfilled, (state, action) => {
-                state.loading = false;
-                state.user = action.payload;
-                state.isAuthenticated = true;
-                state.error = null;
-            })
-            .addCase(loginUser.rejected, (state, action) => {
-                state.loading = false;
-                state.user = null;
-                state.isAuthenticated = false;
-                state.error = action.payload as string;
-            });
-
-        // Handle checkAuth async thunk
         builder
             .addCase(checkAuth.pending, (state) => {
                 state.loading = true;
@@ -237,10 +147,9 @@ const authSlice = createSlice({
                 state.loading = false;
                 state.user = null;
                 state.isAuthenticated = false;
-                state.error = null; // Don't show error for failed auth check
+                state.error = null;
             });
 
-        // Handle loginWithOAuth async thunk
         builder
             .addCase(loginWithOAuth.pending, (state) => {
                 state.loading = true;
@@ -259,7 +168,6 @@ const authSlice = createSlice({
                 state.error = action.payload as string;
             });
 
-        // Handle logoutWithOAuth async thunk
         builder
             .addCase(logoutWithOAuth.pending, (state) => {
                 state.loading = true;
@@ -276,23 +184,5 @@ const authSlice = createSlice({
             });
     },
 });
-
-// Export actions
-export const { logout, clearError, updateUser, setHydrated } =
-    authSlice.actions;
-
-// Export the new OAuth thunks
-// Note: loginWithOAuth and logoutWithOAuth are already exported at their declaration
-
-// Export reducer
+export const { logout, clearError, setHydrated } = authSlice.actions;
 export default authSlice.reducer;
-
-// Selectors (these help components get specific data from the state)
-export const selectUser = (state: { auth: AuthState }) => state.auth.user;
-export const selectIsAuthenticated = (state: { auth: AuthState }) =>
-    state.auth.isAuthenticated;
-export const selectAuthLoading = (state: { auth: AuthState }) =>
-    state.auth.loading;
-export const selectAuthError = (state: { auth: AuthState }) => state.auth.error;
-export const selectHydrated = (state: { auth: AuthState }) =>
-    state.auth.hydrated;

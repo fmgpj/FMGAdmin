@@ -1,18 +1,16 @@
 "use client";
 
-import { useAuth } from "@src/store/hooks";
-import {
-    logout,
-    logoutWithOAuth,
-} from "@src/store/slices/authSlice";
 import { useRouter } from "next/navigation";
+import { useAppDispatch, useAppSelector } from "../redux";
+import { logout, logoutWithOAuth } from "../redux/slices/auth";
 
 /**
  * Custom hook for handling logout functionality
  * Automatically detects OAuth vs traditional login and handles appropriately
  */
 export const useLogout = () => {
-    const { dispatch, user } = useAuth();
+    const { user } = useAppSelector((state) => state.auth);
+    const dispatch = useAppDispatch();
     const router = useRouter();
 
     const handleLogout = async (redirectTo?: string) => {
