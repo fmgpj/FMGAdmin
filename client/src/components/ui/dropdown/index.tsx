@@ -1,3 +1,5 @@
+"use client"
+
 import { DropdownOption, DropdownProps } from "@/src/types/dropdown";
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

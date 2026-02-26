@@ -13,7 +13,7 @@ import {
     faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
+import { SetStateAction, useState } from "react";
 
 const Page = () => {
     // This will automatically initialize breadcrumbs from URL if needed
@@ -33,7 +33,7 @@ const Page = () => {
                         placeholder="Search department"
                         isRounded
                         value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
+                        onChange={(e: { target: { value: SetStateAction<string>; }; }) => setSearchTerm(e.target.value)}
                     />
                     <div className="flex flex-row items-center justify-end gap-x-1 bg-">
                         <Button variant="filled" size="small" bgColor="#BE9F44">

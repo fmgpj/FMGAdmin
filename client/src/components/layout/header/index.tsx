@@ -59,7 +59,7 @@ const notifications = {
 };
 
 export default function Header() {
-    const { isDarkModeActivated, currentTheme } = useAppSelector((state) => state.theme);
+    const { isDarkModeActivated } = useAppSelector((state) => state.theme);
     const dispatch = useAppDispatch();
     const profileRef = useRef<HTMLDivElement>(null);
     const notificationRef = useRef<HTMLDivElement>(null);

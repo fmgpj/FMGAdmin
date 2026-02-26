@@ -1,3 +1,5 @@
+"use client"
+
 import { TableColumn, TableProps } from "@/src/types/table";
 import {
     faChevronLeft,
