@@ -83,7 +83,7 @@ const TicketStatusCard = () => {
     return (
         <Card className="bg-white p-4 h-full">
             <div className="flex flex-col gap-y-4 lg:gap-0 justify-center h-full">
-                <div className="flex flex-col lg:flex-row gap-4">
+                <div className="flex flex-col lg:flex-row gap-4 lg:h-full">
                     <div className="flex flex-row grow lg:w-2/4 items-center justify-between lg:pb-4 gap-x-2">
                         <div className="flex flex-col w-1/2">
                             <div className="bg-primary-100 w-6 h-6 flex items-center justify-center rounded-sm">
@@ -107,7 +107,7 @@ const TicketStatusCard = () => {
                                 On Hold Tickets
                             </p>
                         </div>
-                        <div className="flex flex-col w-1/2">
+                        <div className="flex flex-col w-1/2 h-12">
                             <MiniLineChart
                                 data={[5, 8, 6, 9, 7, 6, 8]}
                                 color="#2a7be3"
@@ -138,7 +138,7 @@ const TicketStatusCard = () => {
                                 Open Ticket
                             </p>
                         </div>
-                        <div className="flex flex-col w-1/2">
+                        <div className="flex flex-col w-1/2 h-12">
                             <MiniLineChart
                                 data={[12, 15, 18, 20, 17, 19, 22]}
                                 color="#00d27b"
@@ -147,7 +147,7 @@ const TicketStatusCard = () => {
                     </div>
                 </div>
                 <div className="h-px bg-gray-100 rounded-full" />
-                <div className="flex flex-col lg:flex-row gap-4">
+                <div className="flex flex-col lg:flex-row gap-4 lg:h-full">
                     <div className="flex flex-row grow lg:w-2/4 items-center justify-between lg:pt-4 gap-x-2">
                         <div className="flex flex-col w-1/2">
                             <div className="bg-secondary-100 w-6 h-6 flex items-center justify-center rounded-sm">
@@ -171,7 +171,7 @@ const TicketStatusCard = () => {
                                 Due Tickets Today
                             </p>
                         </div>
-                        <div className="flex flex-col w-1/2">
+                        <div className="flex flex-col w-1/2 h-12">
                             <MiniLineChart
                                 data={[3, 4, 2, 6, 4, 3, 5]}
                                 color="#27bcfd"
@@ -202,7 +202,7 @@ const TicketStatusCard = () => {
                                 Unassigned
                             </p>
                         </div>
-                        <div className="flex flex-col w-1/2">
+                        <div className="flex flex-col w-1/2 h-12">
                             <MiniLineChart
                                 data={[8, 6, 9, 5, 7, 4, 6]}
                                 color="#f68f57"

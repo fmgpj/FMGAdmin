@@ -120,9 +120,9 @@ const UnresolvedTicketsChart = () => {
     };
 
     return (
-        <div className="h-full w-full flex flex-col">
+        <div className="h-full w-full flex flex-col gap-y-4">
             {/* Priority Legend */}
-            <div className="flex flex-wrap gap-4 text-sm mb-6">
+            <div className="flex flex-wrap gap-4 text-sm">
                 <div className="flex items-center gap-2">
                     <span className="text-2xl font-bold text-gray-800">14</span>
                     <div className="flex items-center gap-1">
@@ -153,7 +153,7 @@ const UnresolvedTicketsChart = () => {
                 </div>
             </div>
             {/* Chart */}
-            <div className="flex-1">
+            <div className="h-48">
                 <Bar data={data} options={options} />
             </div>
         </div>

@@ -1,5 +1,6 @@
 "use client";
 
+import { useBreadcrumb } from "@/src/hooks/useBreadcrumbs";
 import Card from "../../ui/cards";
 import CustomerSatisfactionCard from "./cards/CustomerSatisfaction";
 import RunningProjectsCard from "./cards/RunningProjects";
@@ -11,6 +12,7 @@ import UpcomingScheduleCard from "./cards/UpcomingSchedule";
 import WelcomeCard from "./cards/Welcome";
 
 export default function DashboardPage() {
+    useBreadcrumb("Dashboard");
     return (
         <div className="flex flex-col gap-y-4 px-4">
             <div className="flex flex-col lg:flex-row gap-4">

@@ -1,8 +1,8 @@
 import Card from "@/src/components/ui/cards";
-import { useAuth } from "@/src/store/hooks";
+import { useAppSelector } from "@/src/redux";
 
 const WelcomeCard = () => {
-    const { user } = useAuth();
+    const { user } = useAppSelector((state) => state.auth);
     return (
         <Card className="bg-[#f9fafd] p-4">
             <div className=" flex flex-col">

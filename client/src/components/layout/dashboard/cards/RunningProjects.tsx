@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/purity */
 import Card from "@/src/components/ui/cards";
-import { projects } from "@/src/lib/utils";
+import { projects } from "@data/projects";
 import { faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
