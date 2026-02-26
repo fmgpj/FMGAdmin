@@ -35,3 +35,34 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
 
+## 🚀 Deployment Workflow
+
+We follow a structured deployment process for production releases:
+
+### Quick Deploy
+
+```bash
+# Run pre-deployment checks
+npm run pre-deploy
+
+# Create a release (automatically bumps version and pushes tags)
+npm run release:patch    # for bug fixes
+npm run release:minor    # for new features
+npm run release:major    # for breaking changes
+```
+
+### Documentation
+
+- **[DEPLOYMENT.md](./DEPLOYMENT.md)** - Complete deployment guide and workflows
+- **[CHANGELOG.md](./CHANGELOG.md)** - Track all changes between releases
+- **[RELEASE_TEMPLATE.md](./RELEASE_TEMPLATE.md)** - Template for release preparation
+
+### Automated Script
+
+```bash
+# Run the deployment preparation script (macOS/Linux)
+chmod +x deploy-prep.sh
+./deploy-prep.sh
+```
+
+Vercel automatically deploys when you push to the `main` branch.
