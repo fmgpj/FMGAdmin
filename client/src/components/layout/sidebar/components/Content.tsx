@@ -1,15 +1,15 @@
+import { BreadcrumbLink } from "@/src/components/ui/breadcrumbs/BreadcrumbLink";
 import { usePathname } from "next/navigation";
 import { NavProps } from "../types";
-import Link from "next/link";
 
 type ContentProps = {
     nav: NavProps;
     index: number;
     setDropdownOpen?: (open: boolean) => void;
-}
+};
 
 const Content = ({ nav, index, setDropdownOpen }: ContentProps) => {
-    const pathname = usePathname();;
+    const pathname = usePathname();
 
     return (
         <div className="flex flex-col gap-y-2" key={index}>
@@ -40,25 +40,34 @@ const Content = ({ nav, index, setDropdownOpen }: ContentProps) => {
                                 {links.label}
                             </p>
                         ) : (
-                            <Link
+                            <BreadcrumbLink
+                                path={links.href}
+                                label={links.label}
+                                source="sidebar"
+                                onClick={() =>
+                                    setDropdownOpen && setDropdownOpen(false)
+                                }
                                 className={`font-semibold flex flex-row items-center justify-between text-sm ${pathname === links.href ? "text-[#25303d]" : "text-[#5e6382]"} hover:text-[#25303d]`}
-                                href={links.href}
-                                onClick={() => setDropdownOpen && setDropdownOpen(false)}
                             >
                                 {links.label}
-                            </Link>
+                            </BreadcrumbLink>
                         )}
                         {links.subNav.length > 0 && (
                             <div className="flex flex-col pl-4">
                                 {links.subNav.map((subNav, subnavIndex) => (
-                                    <Link
+                                    <BreadcrumbLink
+                                        path={subNav.href}
+                                        label={subNav.label}
+                                        source="sidebar"
+                                        onClick={() =>
+                                            setDropdownOpen &&
+                                            setDropdownOpen(false)
+                                        }
                                         className={`py-1.5 font-semibold flex flex-row items-center justify-between text-sm ${pathname === subNav.href ? "text-[#25303d]" : "text-[#80849b]"} hover:text-[#25303d]`}
-                                        href={subNav.href}
-                                        onClick={() => setDropdownOpen && setDropdownOpen(false)}
                                         key={subnavIndex}
                                     >
                                         {subNav.label}
-                                    </Link>
+                                    </BreadcrumbLink>
                                 ))}
                             </div>
                         )}

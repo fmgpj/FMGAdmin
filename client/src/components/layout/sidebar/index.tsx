@@ -1,5 +1,5 @@
 "use client";
-import { navs } from "@/src/lib/utils";
+import navs from "@data/navigation";
 import Content from "./components/Content";
 
 export default function Sidebar() {
