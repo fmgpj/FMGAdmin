@@ -22,7 +22,8 @@
             "@/*": ["./*"],
             "@redux/*": ["./redux/*"],
             "@public/*": ["./public/*"],
-            "@src/*": ["./src/*"]
+            "@src/*": ["./src/*"],
+            "@data/*": ["./src/data/*"]
         }
     },
     "include": [
