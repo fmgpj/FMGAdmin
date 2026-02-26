@@ -1,16 +1,30 @@
-type CardProps = {
-    className?: string;
-    children?: React.ReactNode;
-};
+import { CardProps } from "@/src/types/card";
+import { CardSize, CardVariant, getCardClasses } from "./helpers";
 
-const Card = ({ children, className }: CardProps) => {
-    return (
-        <div
-            className={`flex flex-col w-full rounded-lg shadow-xl overflow-hidden ${className}`}
-        >
-            {children}
-        </div>
+interface ExtendedCardProps extends CardProps {
+    variant?: CardVariant;
+    size?: CardSize;
+    rounded?: boolean;
+    hoverable?: boolean;
+}
+
+const Card = ({
+    children,
+    className,
+    variant = "default",
+    size,
+    rounded = true,
+    hoverable = false,
+}: ExtendedCardProps) => {
+    const cardClasses = getCardClasses(
+        variant,
+        size,
+        rounded,
+        hoverable,
+        className
     );
+
+    return <div className={cardClasses}>{children}</div>;
 };
 
 export default Card;
