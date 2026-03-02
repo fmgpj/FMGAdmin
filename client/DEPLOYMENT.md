@@ -4,27 +4,58 @@
 
 This document outlines the deployment workflow and best practices for the FMGAdmin client application hosted on Vercel.
 
+## 🌳 Branch Strategy
+
+### Branch Hierarchy
+
+```
+main (production)
+├── test (integration testing)
+├── local (local testing)
+├── local-pj (developer: Pijay)
+└── feature-branch (specific features)
+```
+
+### Branch Responsibilities
+
+- **feature-branch**: Feature development and testing
+- **local-pj**: Developer integration and preparation
+- **local**: Local testing and validation
+- **test**: Integration testing before production
+- **main**: Production releases and deployment
+
 ## 🚀 Deployment Workflow
 
 ### Step 1: Feature Development
 
+**Branch**: `feature-branch`
+
 ```bash
-# Create feature branch
-git checkout -b feature/new-feature-name
+# Start feature development
+git checkout -b feature/new-feature-name local-pj
 
-# Make your changes
-# ... code development ...
-
-# Commit with conventional messages
+# Make your changes and commit
 git add .
 git commit -m "feat: add dropdown component with search functionality"
+
+# Push feature branch
+git push origin feature/new-feature-name
+
+# Merge back to developer branch when complete
+git checkout local-pj
+git merge feature/new-feature-name
 ```
 
 ### Step 2: Pre-Deployment Preparation
 
+**Branch**: `local-pj` (Developer Integration)
+
 #### 2.1 Check Current Version
 
 ```bash
+# Ensure you're on your developer branch
+git checkout local-pj
+
 # Check current version in package.json
 node -p "require('./package.json').version"
 ```
@@ -67,6 +98,8 @@ npm run start
 
 ### Step 3: Version Management
 
+**Branch**: `local-pj` (Prepare Release)
+
 #### 3.1 Choose Version Bump Type
 
 - **PATCH** (0.0.1): Bug fixes, backwards compatible
@@ -76,8 +109,8 @@ npm run start
 #### 3.2 Update Version
 
 ```bash
-# For patch updates (bug fixes)
-npm version patch
+# Ensure you're on local-pj branch
+git checkout local-pj
 
 # For minor updates (new features)
 npm version minor
@@ -96,11 +129,13 @@ npm version major
 
 ### Step 4: Release Process
 
+**Branch**: `local-pj` → `local` → `test` → `main` (Branch Hierarchy Merge)
+
 #### 4.1 Update Changelog with New Version
 
 ```bash
 # In CHANGELOG.md, move items from [Unreleased] to new version section:
-## [0.2.0] - 2026-03-02
+## [0.2.0] - 2026-03-03
 
 ### Added
 - New dropdown component with search
@@ -110,7 +145,7 @@ npm version major
 - Button hover state issue
 ```
 
-#### 4.2 Commit Release Changes
+#### 4.2 Commit Release Changes (on local-pj)
 
 ```bash
 # Add all changes
@@ -119,16 +154,38 @@ git add .
 # Commit with release message
 git commit -m "chore: release v0.2.0"
 
-# Create and push tag
+# Create tag
 git tag v0.2.0
+```
+
+#### 4.3 Merge Through Branch Hierarchy
+
+```bash
+# Push local-pj changes
+git push origin local-pj --tags
+
+# Merge to local for testing
+git checkout local
+git merge local-pj
+git push origin local
+
+# Merge to test for integration testing
+git checkout test
+git merge local
+git push origin test
+
+# Finally merge to main for production
+git checkout main
+git merge test
 git push origin main --tags
 ```
 
-#### 4.3 Release Checklist
+#### 4.4 Release Checklist
 
 - [ ] ✅ CHANGELOG.md updated with new version section
 - [ ] ✅ Changes committed with proper message
 - [ ] ✅ Tag created and pushed
+- [ ] ✅ Merged through all branch levels (local-pj → local → test → main)
 - [ ] ✅ Ready for Vercel deployment
 
 **🎯 When complete, tell me "ready for step 5" to continue!**
@@ -191,19 +248,52 @@ Once deployed, update your OAuth providers:
 
 ## 🔄 Future Deployments (After Initial Setup)
 
+### Branch Strategy for Releases
+
+**Development Flow:**
+
+```
+feature-branch → local-pj → local → test → main
+```
+
+**Deployment Triggers:**
+
+- **feature-branch**: No deployment (development only)
+- **local-pj**: No deployment (developer integration)
+- **local**: No deployment (local testing)
+- **test**: Preview deployment (integration testing)
+- **main**: Production deployment (live site)
+
 ### Automatic Deployments
 
-- **Preview**: Every push to feature branches creates preview deployment
+- **Preview**: Pushes to `test` branch create preview deployment
 - **Production**: Pushes to `main` branch auto-deploy to production
 
-### Quick Release Commands
+### Quick Release Commands (from local-pj branch)
 
 ```bash
 # Use these for future releases after initial setup
-npm run pre-deploy          # Run checks
-npm run release:patch        # Bug fixes
-npm run release:minor        # New features
-npm run release:major        # Breaking changes
+npm run pre-deploy          # Run checks on local-pj
+npm run release:patch        # Bug fixes → auto-merge to main
+npm run release:minor        # New features → auto-merge to main
+npm run release:major        # Breaking changes → auto-merge to main
+```
+
+### Manual Branch Workflow (Alternative)
+
+```bash
+# 1. Prepare release on local-pj
+git checkout local-pj
+npm run pre-deploy
+npm version minor
+
+# 2. Merge up the hierarchy
+git checkout local && git merge local-pj
+git checkout test && git merge local
+git checkout main && git merge test
+
+# 3. Push production
+git push origin main --tags
 ```
 
 ## 📝 Commit Message Convention
