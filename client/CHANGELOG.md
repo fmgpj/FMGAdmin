@@ -9,13 +9,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Dropdown component with search functionality
-- Table component with pagination
-- Authentication system setup
-- Dashboard layout structure
-- Field component with basic functionality and theming
-- Button component with basic functionality and theming
-
 ### Changed
 
 ### Deprecated
@@ -25,6 +18,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 ### Security
+
+## [0.2.0] - 2026-03-03
+
+### Added
+
+- Dropdown component with search functionality
+- Table component with pagination
+- Authentication system setup
+- Dashboard layout structure
+- Field component with basic functionality and theming
+- Button component with basic functionality and theming
 
 ## [0.1.0] - 2026-02-22
 
