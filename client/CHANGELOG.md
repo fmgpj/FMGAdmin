@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Table component with pagination
 - Authentication system setup
 - Dashboard layout structure
+- Field component with basic functionality and theming
+- Button component with basic functionality and theming
 
 ### Changed
 

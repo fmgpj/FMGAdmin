@@ -6,7 +6,7 @@ This document outlines the deployment workflow and best practices for the FMGAdm
 
 ## 🚀 Deployment Workflow
 
-### 1. Feature Development
+### Step 1: Feature Development
 
 ```bash
 # Create feature branch
@@ -20,88 +20,190 @@ git add .
 git commit -m "feat: add dropdown component with search functionality"
 ```
 
-### 2. Pre-Deployment Checklist
+### Step 2: Pre-Deployment Preparation
 
-- [ ] Update version in `package.json`
-- [ ] Update `CHANGELOG.md` with changes
-- [ ] Run tests: `npm run lint`
-- [ ] Build locally: `npm run build`
-- [ ] Test locally: `npm run start`
-
-### 3. Version Management
-
-#### Semantic Versioning (SemVer)
-
-- **MAJOR** (1.0.0): Breaking changes
-- **MINOR** (0.1.0): New features, backwards compatible
-- **PATCH** (0.0.1): Bug fixes, backwards compatible
-
-#### Version Update Script
+#### 2.1 Check Current Version
 
 ```bash
-# For patch updates
+# Check current version in package.json
+node -p "require('./package.json').version"
+```
+
+#### 2.2 Update CHANGELOG.md
+
+- Open `CHANGELOG.md`
+- Add your changes under `[Unreleased]` section
+- Follow the format: Added, Changed, Deprecated, Removed, Fixed, Security
+
+#### 2.3 Run Quality Checks
+
+```bash
+# Run linting
+npm run lint
+
+# If errors found, fix them before continuing
+```
+
+#### 2.4 Test Build Locally
+
+```bash
+# Build the project
+npm run build
+
+# Start production server to test
+npm run start
+# Test at http://localhost:3000
+```
+
+#### 2.5 Pre-Deployment Checklist
+
+- [ ] ✅ Version checked in `package.json`
+- [ ] ✅ `CHANGELOG.md` updated with changes
+- [ ] ✅ Linting passed: `npm run lint`
+- [ ] ✅ Build successful: `npm run build`
+- [ ] ✅ Local testing passed: `npm run start`
+
+**🎯 When all checkboxes are complete, tell me "ready for step 3" to continue!**
+
+### Step 3: Version Management
+
+#### 3.1 Choose Version Bump Type
+
+- **PATCH** (0.0.1): Bug fixes, backwards compatible
+- **MINOR** (0.1.0): New features, backwards compatible
+- **MAJOR** (1.0.0): Breaking changes
+
+#### 3.2 Update Version
+
+```bash
+# For patch updates (bug fixes)
 npm version patch
 
-# For minor updates
+# For minor updates (new features)
 npm version minor
 
-# For major updates
+# For major updates (breaking changes)
 npm version major
 ```
 
-### 4. Release Process
+#### 3.3 Version Update Checklist
 
-#### Step 1: Update Changelog
+- [ ] ✅ Decided on version bump type (patch/minor/major)
+- [ ] ✅ Version updated using `npm version [type]`
+- [ ] ✅ New version shows in `package.json`
 
-In `CHANGELOG.md`, move items from `[Unreleased]` to a new version section:
+**🎯 When complete, tell me "ready for step 4" to continue!**
 
-```markdown
-## [0.2.0] - 2026-02-22
+### Step 4: Release Process
 
-### Added
-
-- New dropdown component with search
-- Infinite scrolling support
-```
-
-#### Step 2: Commit Release
+#### 4.1 Update Changelog with New Version
 
 ```bash
+# In CHANGELOG.md, move items from [Unreleased] to new version section:
+## [0.2.0] - 2026-03-02
+
+### Added
+- New dropdown component with search
+- Infinite scrolling support
+
+### Fixed
+- Button hover state issue
+```
+
+#### 4.2 Commit Release Changes
+
+```bash
+# Add all changes
 git add .
+
+# Commit with release message
 git commit -m "chore: release v0.2.0"
+
+# Create and push tag
 git tag v0.2.0
 git push origin main --tags
 ```
 
-#### Step 3: Vercel Deployment
+#### 4.3 Release Checklist
 
-Vercel automatically deploys when you push to main branch.
+- [ ] ✅ CHANGELOG.md updated with new version section
+- [ ] ✅ Changes committed with proper message
+- [ ] ✅ Tag created and pushed
+- [ ] ✅ Ready for Vercel deployment
 
-## 🔄 Vercel-Specific Workflow
+**🎯 When complete, tell me "ready for step 5" to continue!**
+
+### Step 5: Vercel Deployment
+
+#### 5.1 Prepare Environment Variables
+
+Before deploying, gather these values for Vercel dashboard:
+
+```
+NEXT_PUBLIC_GOOGLE_CLIENT_ID=your_google_client_id
+NEXT_PUBLIC_GOOGLE_CLIENT_SECRET=your_google_secret
+NEXT_PUBLIC_MICROSOFT_CLIENT_ID=your_microsoft_client_id
+NEXT_PUBLIC_MICROSOFT_CLIENT_SECRET=your_microsoft_secret
+NEXT_PUBLIC_MICROSOFT_TENANT_ID=your_tenant_id
+NEXT_PUBLIC_NEXTAUTH_SECRET=your_secret_key
+```
+
+#### 5.2 Upload to Vercel
+
+1. Go to [vercel.com](https://vercel.com)
+2. Click "New Project"
+3. Upload your project folder OR connect Git repository
+4. Configure project settings:
+    - Framework Preset: **Next.js**
+    - Build Command: `npm run build`
+    - Output Directory: `.next`
+
+#### 5.3 Configure Environment Variables
+
+1. In Vercel dashboard → Project → Settings → Environment Variables
+2. Add all variables from Step 5.1
+3. Set Environment: **Production**
+
+#### 5.4 Deploy and Test
+
+1. Click "Deploy" button
+2. Wait for build to complete
+3. Test your deployed application
+4. Verify authentication works with your OAuth providers
+
+#### 5.5 Update OAuth Redirect URLs
+
+Once deployed, update your OAuth providers:
+
+- **Google Console**: Add `https://your-app.vercel.app/api/auth/callback/google`
+- **Microsoft Azure**: Add `https://your-app.vercel.app/api/auth/callback/azure-ad`
+
+#### 5.6 Vercel Deployment Checklist
+
+- [ ] ✅ Environment variables configured in Vercel
+- [ ] ✅ Project uploaded/connected to Vercel
+- [ ] ✅ Build completed successfully
+- [ ] ✅ Application accessible at Vercel URL
+- [ ] ✅ OAuth redirect URLs updated
+- [ ] ✅ Authentication tested and working
+
+**🎯 When complete, tell me "deployment finished!" and celebrate! 🎉**
+
+## 🔄 Future Deployments (After Initial Setup)
 
 ### Automatic Deployments
 
-- **Preview**: Every push to any branch creates a preview deployment
-- **Production**: Pushes to `main` branch deploy to production
-- **Custom domains**: Configure in Vercel dashboard
+- **Preview**: Every push to feature branches creates preview deployment
+- **Production**: Pushes to `main` branch auto-deploy to production
 
-### Environment Variables
+### Quick Release Commands
 
 ```bash
-# Production environment variables in Vercel dashboard:
-NEXTAUTH_URL=https://your-domain.vercel.app
-NEXTAUTH_SECRET=your-secret-key
-DATABASE_URL=your-db-connection-string
-```
-
-### Deployment Commands (vercel.json)
-
-```json
-{
-    "buildCommand": "npm run build",
-    "devCommand": "npm run dev",
-    "framework": "nextjs"
-}
+# Use these for future releases after initial setup
+npm run pre-deploy          # Run checks
+npm run release:patch        # Bug fixes
+npm run release:minor        # New features
+npm run release:major        # Breaking changes
 ```
 
 ## 📝 Commit Message Convention
@@ -178,16 +280,54 @@ npm run migrate
 npm run seed
 ```
 
-## 📊 Changelog Automation (Optional)
+## 🤖 Automated Changelog Generation
 
-### Auto-generate changelog from commits:
+### Option 1: GitHub Actions (Fully Automated) ⭐ RECOMMENDED
+
+- **File**: `.github/workflows/release-please.yml` (already created)
+- **What it does**:
+    - Auto-generates changelog from conventional commit messages
+    - Auto-bumps versions (patch/minor/major)
+    - Creates GitHub releases automatically
+    - Triggers on every push to main branch
+
+**To use**: Just push commits with conventional format:
 
 ```bash
-npm install -D conventional-changelog-cli
-
-# Add to package.json scripts:
-"changelog": "conventional-changelog -p angular -i CHANGELOG.md -s"
+git commit -m "feat: add new dashboard widget"
+git commit -m "fix: resolve login redirect issue"
+git commit -m "docs: update deployment guide"
 ```
+
+### Option 2: Manual Script (Run When Needed)
+
+```bash
+# Generate changelog from recent commits
+npm run changelog
+
+# Or run the script directly
+bash generate-changelog.sh
+```
+
+### Option 3: Automated with Release (Best for Manual Releases)
+
+```bash
+# These commands now auto-generate changelog:
+npm run release:patch    # Auto-generates + patches version
+npm run release:minor    # Auto-generates + minor version
+npm run release:major    # Auto-generates + major version
+```
+
+### Conventional Commit Format
+
+For automatic changelog generation, use these commit prefixes:
+
+- `feat:` → New features (🚀 Features section)
+- `fix:` → Bug fixes (🐛 Bug Fixes section)
+- `docs:` → Documentation (📚 Documentation section)
+- `style:` → Code formatting (💎 Styles section)
+- `refactor:` → Code refactoring (♻️ Code Refactoring section)
+- `chore:` → Maintenance tasks (hidden from changelog)
 
 ## 🚨 Emergency Procedures
 
