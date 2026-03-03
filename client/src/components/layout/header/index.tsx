@@ -79,7 +79,7 @@ export default function Header() {
                     <button
                         type="button"
                         onClick={() => setSidebarOpen(!sidebarOpen)}
-                        className="relative p-1 lg:hidden"
+                        className="relative p-1 xl:hidden"
                     >
                         <FontAwesomeIcon
                             icon={faBarsStaggered}

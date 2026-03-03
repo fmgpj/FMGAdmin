@@ -28,12 +28,14 @@ const Page = () => {
                 <p className="text-xl font-semibold">All departments</p>
                 <div className="flex flex-row items-center justify-between gap-x-10">
                     <Field
-                        className="w-full"
+                        className="w-full sm:w-6/12 md:w-5/12"
                         variant="outlined"
                         placeholder="Search department"
                         isRounded
                         value={searchTerm}
-                        onChange={(e: { target: { value: SetStateAction<string>; }; }) => setSearchTerm(e.target.value)}
+                        onChange={(e: {
+                            target: { value: SetStateAction<string> };
+                        }) => setSearchTerm(e.target.value)}
                     />
                     <div className="flex flex-row items-center justify-end gap-x-1 bg-">
                         <Button variant="filled" size="small" bgColor="#BE9F44">
@@ -50,6 +52,7 @@ const Page = () => {
                     </div>
                 </div>
             </div>
+            {/* <div className="overflow-hidden max-w-5xl"> */}
             <Table
                 size="large"
                 variant="compact"
@@ -106,6 +109,7 @@ const Page = () => {
                     },
                 ]}
             />
+            {/* </div> */}
         </div>
     );
 };

@@ -48,7 +48,7 @@ export default function ConditionalLayout({
             {isAuthenticated && <Header />}
             <main className="flex flex-row grow overflow-hidden gap-x-4">
                 {isAuthenticated && <Sidebar />}
-                <div className="flex flex-col w-full h-screen relative">
+                <div className="flex flex-col w-full xl:min-w-10/12 xl:w-10/12 xl:max-w-10/12 h-screen relative">
                     {isAuthenticated && <Breadcrumbs />}
                     <div
                         className={`w-full h-screen overflow-y-scroll [&::-webkit-scrollbar]:hidden ${isAuthenticated && "pb-17"}`}
