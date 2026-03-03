@@ -2,51 +2,46 @@
 
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
-
 ## [Unreleased]
 
-### Added
+### 🚀 Added
 
-### Changed
+### 🔄 Changed
 
-### Deprecated
+### 🐛 Fixed
 
-### Removed
+### 🗑️ Removed
 
-### Fixed
+## [1.0.2] - 2026-03-03
 
-### Security
+### 🚀 Added
 
-## [0.2.0] - 2026-03-03
+- Authentication route guards to protect pages from unauthorized access
+- Automatic redirect to login page when accessing protected routes without authentication
 
-### Added
+### 🔄 Changed
 
-- Dropdown component with search functionality
-- Table component with pagination
-- Authentication system setup
-- Dashboard layout structure
-- Field component with basic functionality and theming
-- Button component with basic functionality and theming
+### 🐛 Fixed
 
-## [0.1.0] - 2026-02-22
+### 🗑️ Removed
 
-### Added
+### 🚀 Features
 
-- Initial project setup
-- Next.js 16.1.3 with TypeScript
-- Tailwind CSS configuration
-- Basic project structure
-- FontAwesome icons integration
+- initial department module (list)
+- initial table component
+- initial field component
+- initial dropdown component
+- initial card component
+- initial button component
+- initial avatar component
+- initial breadcrumbs component
 
-<!--
-## Version format: [MAJOR.MINOR.PATCH] - YYYY-MM-DD
+### 🐛 Bug Fixes
 
-### Added - for new features
-### Changed - for changes in existing functionality
-### Deprecated - for soon-to-be removed features
-### Removed - for now removed features
-### Fixed - for any bug fixes
-### Security - in case of vulnerabilities
--->
+- resolve build errors
+
+### 📚 Documentation
+
+- added deployment guide
+- added ui helpers
+- added color guide

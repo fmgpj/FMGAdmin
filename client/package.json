@@ -1,6 +1,6 @@
 {
     "name": "client",
-    "version": "0.2.0",
+    "version": "1.0.2",
     "private": true,
     "scripts": {
         "dev": "next dev",
@@ -8,10 +8,14 @@
         "start": "next start",
         "lint": "eslint",
         "pre-deploy": "npm run lint && npm run build",
+        "deploy-prep": "bash deploy-prep.sh",
         "changelog": "bash generate-changelog.sh",
-        "release:patch": "npm run changelog && npm version patch && git add CHANGELOG.md && git commit -m 'chore: update changelog' && git push origin main --tags",
-        "release:minor": "npm run changelog && npm version minor && git add CHANGELOG.md && git commit -m 'chore: update changelog' && git push origin main --tags",
-        "release:major": "npm run changelog && npm version major && git add CHANGELOG.md && git commit -m 'chore: update changelog' && git push origin main --tags",
+        "release:patch": "echo 'Use deploy-prep.sh instead for proper branch workflow' && exit 1",
+        "release:minor": "echo 'Use deploy-prep.sh instead for proper branch workflow' && exit 1",
+        "release:major": "echo 'Use deploy-prep.sh instead for proper branch workflow' && exit 1",
+        "quick-release:patch": "npm version patch --no-git-tag-version && git add package.json && git commit -m 'chore: bump patch version'",
+        "quick-release:minor": "npm version minor --no-git-tag-version && git add package.json && git commit -m 'chore: bump minor version'",
+        "quick-release:major": "npm version major --no-git-tag-version && git add package.json && git commit -m 'chore: bump major version'",
         "check-deployment": "npm run lint && npm run build && echo 'Ready for deployment!'"
     },
     "dependencies": {
