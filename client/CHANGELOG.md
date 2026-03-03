@@ -12,6 +12,18 @@ All notable changes to this project will be documented in this file.
 
 ### 🗑️ Removed
 
+## [1.0.3] - 2026-03-03
+
+### 🚀 Added
+
+### 🔄 Changed
+
+- Table width adjustment on Department module for bigger screens
+
+### 🐛 Fixed
+
+### 🗑️ Removed
+
 ## [1.0.2] - 2026-03-03
 
 ### 🚀 Added
