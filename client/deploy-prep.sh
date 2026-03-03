@@ -159,7 +159,7 @@ if [ "$VERSION_CHOICE" != "4" ]; then
     read -p "Press Enter when CHANGELOG.md is updated..."
     
     # Commit version changes on current branch
-    git add package.json CHANGELOG.md
+    git add package.json CHANGELOG.md package-lock.json
     git commit -m "chore: release v${NEW_VERSION}"
     
     # Create tag
