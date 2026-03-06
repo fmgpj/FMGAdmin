@@ -12,6 +12,28 @@ All notable changes to this project will be documented in this file.
 
 ### 🗑️ Removed
 
+## [1.0.4] - 2026-03-07
+
+### 🚀 Added
+
+- Form UI for department with basic validation and on submit function
+- Added ellipsis on overlapping text in dropdown component
+- Added ellipsis on overlapping text in field component
+- Install additional libraries for form (react-query and react-hook-form) and additional implementation setup for newly added libraries
+
+### 🔄 Changed
+
+- Additional styling for breadcrumbs
+- Spacing and sizing adjustment on dropdown component
+- Adjust spacing and padding on feild component
+- Adjustment on table's height, makes it fit to screen
+
+### 🐛 Fixed
+
+### 🗑️ Removed
+
+- Remove ring outline on button when focused
+
 ## [1.0.3] - 2026-03-03
 
 ### 🚀 Added

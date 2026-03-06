@@ -78,13 +78,13 @@ export const getPadding = (
 // Utility to combine all button classes
 export const getButtonClassNames = (variant?: string): string => {
     const baseClasses =
-        "transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2";
+        "transition-colors duration-200 focus:outline-none";
 
     switch (variant) {
         case "filled":
-            return `${baseClasses} focus:ring-blue-500`;
+            return `${baseClasses}`;
         case "outlined":
-            return `${baseClasses} focus:ring-blue-300`;
+            return `${baseClasses}`;
         default:
             return baseClasses;
     }

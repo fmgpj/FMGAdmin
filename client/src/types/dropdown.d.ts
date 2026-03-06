@@ -12,4 +12,5 @@ export interface DropdownProps {
     disabled?: boolean;
     searchable?: boolean;
     searchPlaceholder?: string;
+    isRounded?: boolean;
 }
