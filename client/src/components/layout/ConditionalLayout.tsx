@@ -2,11 +2,14 @@
 
 // import { useAuth } from "@src/store/hooks";
 import { useAppSelector } from "@/src/redux";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
 import Breadcrumbs from "../ui/breadcrumbs";
 import Header from "./header";
 import Sidebar from "./sidebar";
+
+const client = new QueryClient();
 
 export default function ConditionalLayout({
     children,
@@ -43,20 +46,22 @@ export default function ConditionalLayout({
     }
 
     return (
-        <div className="flex flex-col min-h-screen max-w-7xl mx-auto">
-            {/* Header and Sidebar only show when authenticated */}
-            {isAuthenticated && <Header />}
-            <main className="flex flex-row grow overflow-hidden gap-x-4">
-                {isAuthenticated && <Sidebar />}
-                <div className="flex flex-col w-full xl:min-w-10/12 xl:w-10/12 xl:max-w-10/12 h-screen relative">
-                    {isAuthenticated && <Breadcrumbs />}
-                    <div
-                        className={`w-full h-screen overflow-y-scroll [&::-webkit-scrollbar]:hidden ${isAuthenticated && "pb-17"}`}
-                    >
-                        {children}
+        <QueryClientProvider client={client}>
+            <div className="flex flex-col min-h-screen max-w-7xl mx-auto">
+                {/* Header and Sidebar only show when authenticated */}
+                {isAuthenticated && <Header />}
+                <main className="flex flex-row grow overflow-hidden gap-x-4">
+                    {isAuthenticated && <Sidebar />}
+                    <div className="flex flex-col w-full xl:min-w-10/12 xl:w-10/12 xl:max-w-10/12 h-screen relative">
+                        {isAuthenticated && <Breadcrumbs />}
+                        <div
+                            className={`w-full h-screen overflow-y-scroll [&::-webkit-scrollbar]:hidden ${isAuthenticated && "pb-17"}`}
+                        >
+                            {children}
+                        </div>
                     </div>
-                </div>
-            </main>
-        </div>
+                </main>
+            </div>
+        </QueryClientProvider>
     );
 }

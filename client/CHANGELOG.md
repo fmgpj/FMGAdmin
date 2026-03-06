@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 - Form UI for department with basic validation and on submit function
 - Added ellipsis on overlapping text in dropdown component
 - Added ellipsis on overlapping text in field component
+- Install additional libraries for form (react-query and react-hook-form) and additional implementation setup for newly added libraries
 
 ### 🔄 Changed
 
