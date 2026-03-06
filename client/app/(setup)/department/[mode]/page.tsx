@@ -19,7 +19,7 @@ const Page = () => {
         register,
         control,
         handleSubmit,
-        formState: { errors, isSubmitting },
+        formState: { errors },
     } = useForm<FormData>({
         defaultValues: {
             name: "",
