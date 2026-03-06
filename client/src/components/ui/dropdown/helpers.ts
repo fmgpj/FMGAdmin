@@ -1,6 +1,24 @@
 import { DropdownOption } from "@/src/types/dropdown";
 
 /**
+ * Get padding based on isRounded prop
+ * @param isRounded - Whether the dropdown is rounded
+ * @returns Padding string
+ */
+export const getPadding = (isRounded?: boolean): string => {
+    return isRounded ? "4px 12px" : "4px 8px";
+};
+
+/**
+ * Get border radius based on isRounded prop
+ * @param isRounded - Whether the dropdown is rounded
+ * @returns Border radius string
+ */
+export const getBorderRadius = (isRounded?: boolean): string => {
+    return isRounded ? "20px" : "4px";
+};
+
+/**
  * Check if an option is currently selected
  * @param optionValue - The value to check
  * @param currentValue - The current selected value

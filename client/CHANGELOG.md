@@ -7,12 +7,15 @@ All notable changes to this project will be documented in this file.
 ### 🚀 Added
 
 - Form UI for department with basic validation and on submit function
+- Added ellipsis on overlapping text in dropdown component
 
 ### 🔄 Changed
 
 - Additional styling for breadcrumbs
+- Spacing and sizing adjustment on dropdown component
 
 ### 🐛 Fixed
+
 
 ### 🗑️ Removed
 

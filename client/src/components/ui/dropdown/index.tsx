@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { DropdownOption, DropdownProps } from "@/src/types/dropdown";
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
@@ -7,8 +7,10 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import Field from "../field";
 import {
     filterOptions,
+    getBorderRadius,
     getDisplayText,
     getOptionBackgroundColor,
+    getPadding,
     getSelectedOption,
 } from "./helpers";
 
@@ -20,6 +22,7 @@ const Dropdown = ({
     disabled,
     searchable,
     searchPlaceholder = "Search...",
+    isRounded,
 }: DropdownProps) => {
     const dropdownRef = useRef<HTMLDivElement>(null);
     const searchInputRef = useRef<HTMLInputElement>(null);
@@ -118,9 +121,9 @@ const Dropdown = ({
                 onKeyDown={handleKeyDown}
                 tabIndex={0}
                 style={{
-                    padding: "8px 12px",
+                    padding: getPadding(isRounded),
                     border: "1px solid #d1d5db",
-                    borderRadius: "4px",
+                    borderRadius: getBorderRadius(isRounded),
                     cursor: disabled ? "not-allowed" : "pointer",
                     backgroundColor: "#ffffff",
                     display: "flex",
@@ -130,7 +133,13 @@ const Dropdown = ({
                     gap: "8px",
                 }}
             >
-                <p>
+                <p
+                    style={{
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                    }}
+                >
                     {getDisplayText(
                         selectedOption,
                         placeholder || "Select an option"
@@ -194,6 +203,9 @@ const Dropdown = ({
                                         value
                                     ),
                                     opacity: option.disabled ? 0.6 : 1,
+                                    overflow: "hidden",
+                                    textOverflow: "ellipsis",
+                                    whiteSpace: "nowrap",
                                 }}
                                 key={option.value}
                                 onClick={() => {
