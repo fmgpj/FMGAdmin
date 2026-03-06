@@ -11,7 +11,7 @@ export const getFieldStyles = ({
         color: getTextColor(color),
         backgroundColor: getBackgroundColor(variant, bgColor),
         outline: "none",
-        padding: getPadding(),
+        padding: getPadding(isRounded),
         border: getBorder(variant),
         borderRadius: getBorderRadius(isRounded),
     };
@@ -47,8 +47,8 @@ export const getBorderRadius = (isRounded?: boolean): string => {
 };
 
 // Get padding
-export const getPadding = (): string => {
-    return "4px 8px";
+export const getPadding = (isRounded: boolean): string => {
+    return isRounded ? "4px 12px" : "4px 8px";
 };
 
 // Get field state classes
