@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { TableColumn, TableProps } from "@/src/types/table";
 import {
@@ -104,9 +104,9 @@ const Table = <T,>({
             )}
 
             {/* Scrollable Table Container */}
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto overflow-y-auto max-h-screen">
                 <table className={getVariantStyles(variant)}>
-                    <thead className={getHeaderStyles(variant)}>
+                    <thead className={`${getHeaderStyles(variant)}`}>
                         <tr>
                             {columns.map((column: TableColumn<T>) => (
                                 <th
@@ -120,40 +120,53 @@ const Table = <T,>({
                         </tr>
                     </thead>
                     <tbody>
-                        {paginatedData.map((row: T, index: number) => (
-                            <tr
-                                key={index}
-                                className={getRowStyles(index, variant)}
-                            >
-                                {columns.map((column: TableColumn<T>) => (
-                                    <td
-                                        key={column.key}
-                                        className={`${getTextStyles(size)} ${getCellPadding(size, variant)}`}
-                                        style={getCellStyle(column)}
-                                    >
-                                        {column.render
-                                            ? column.render(
-                                                  (
-                                                      row as Record<
-                                                          string,
-                                                          unknown
-                                                      >
-                                                  )[column.key as string] ?? "",
-                                                  row,
-                                                  index
-                                              )
-                                            : String(
-                                                  (
-                                                      row as Record<
-                                                          string,
-                                                          unknown
-                                                      >
-                                                  )[column.key as string] ?? ""
-                                              )}
-                                    </td>
-                                ))}
+                        {paginatedData.length > 0 ? (
+                            paginatedData.map((row: T, index: number) => (
+                                <tr
+                                    key={index}
+                                    className={getRowStyles(index, variant)}
+                                >
+                                    {columns.map((column: TableColumn<T>) => (
+                                        <td
+                                            key={column.key}
+                                            className={`${getTextStyles(size)} ${getCellPadding(size, variant)}`}
+                                            style={getCellStyle(column)}
+                                        >
+                                            {column.render
+                                                ? column.render(
+                                                      (
+                                                          row as Record<
+                                                              string,
+                                                              unknown
+                                                          >
+                                                      )[column.key as string] ??
+                                                          "",
+                                                      row,
+                                                      index
+                                                  )
+                                                : String(
+                                                      (
+                                                          row as Record<
+                                                              string,
+                                                              unknown
+                                                          >
+                                                      )[column.key as string] ??
+                                                          ""
+                                                  )}
+                                        </td>
+                                    ))}
+                                </tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td
+                                    colSpan={columns.length}
+                                    className="py-3 text-center text-gray-500 text-sm"
+                                >
+                                    No results found
+                                </td>
                             </tr>
-                        ))}
+                        )}
                     </tbody>
                 </table>
             </div>

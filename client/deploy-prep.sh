@@ -1,53 +1,37 @@
 #!/bin/bash
 
-# FMGAdmin Deployment Preparation Script
-# Follows the documented branch hierarchy: local-pj → local → test → main
+# FMGAdmin Deployment Preparation Script (run only from `local` branch)
 echo "🚀 FMGAdmin Deployment Preparation"
 echo "=================================="
 
-# Check current branch and validate workflow
+# Get current branch
 CURRENT_BRANCH=$(git branch --show-current)
 echo "Current branch: $CURRENT_BRANCH"
 
-# Branch validation based on deployment workflow
-validate_branch() {
-    case $CURRENT_BRANCH in
-        "local-pj")
-            echo "✅ Starting deployment from developer branch (local-pj)"
-            ;;
-        "local"|"test"|"main")
-            echo "⚠️  You're on $CURRENT_BRANCH branch."
-            echo "Deployment should start from 'local-pj' branch for proper workflow."
-            echo "Continue anyway? (y/n)"
-            read -r CONTINUE
-            if [ "$CONTINUE" != "y" ]; then
-                echo "Please switch to 'local-pj' branch: git checkout local-pj"
-                exit 1
-            fi
-            ;;
-        *)
-            echo "⚠️  You're on '$CURRENT_BRANCH' branch."
-            echo "This doesn't match the standard workflow (feature-branch → local-pj → local → test → main)."
-            echo "Continue anyway? (y/n)"
-            read -r CONTINUE
-            if [ "$CONTINUE" != "y" ]; then
-                exit 1
-            fi
-            ;;
-    esac
-}
+# If not on 'local', instruct developer what to do and exit
+if [ "$CURRENT_BRANCH" != "local" ]; then
+    echo "\n⚠️  This script must be run from the 'local' branch."
+    echo "As a developer, please ensure your feature/developer branch is up-to-date with 'local' and merge feature branches into your developer branch before running this script."
+    echo "\nRecommended steps (example):"
+    echo "1) Fetch latest remote branches: git fetch origin"
+    echo "2) On your feature branch: git checkout feature/your-feature"
+    echo "3) Rebase or merge local into your feature branch: git rebase origin/local  # or git merge origin/local"
+    echo "4) Run your tests and push your feature to origin if needed: git push origin feature/your-feature"
+    echo "5) Switch to your developer branch and merge feature branches: git checkout local && git merge --no-ff feature/your-feature"
+    echo "6) Push updated local branch: git push origin local"
+    echo "\nOnce 'local' contains all desired changes, run this script from the 'local' branch to prepare and promote the release."
+    exit 1
+fi
 
-validate_branch
+echo "\n✅ Running deployment preparation from 'local' branch"
 
 # Pre-deployment checks
-echo ""
-echo "📋 Running Step 2: Pre-deployment checks..."
+echo "\n📋 Running pre-deployment checks..."
 
 echo "1️⃣ Running linter..."
 npm run lint
 if [ $? -ne 0 ]; then
     echo "❌ Linting failed. Please fix errors before deploying."
-    echo "Run: npm run lint and fix all issues."
     exit 1
 fi
 
@@ -70,38 +54,27 @@ fi
 CURRENT_VERSION=$(node -p "require('./package.json').version")
 echo "4️⃣ Current version: $CURRENT_VERSION"
 
-echo ""
-echo "📦 Step 3: Version Management"
+echo "\n📦 Version Management"
 echo "Choose version bump type:"
-echo "1) Patch (0.0.1) - Bug fixes, backwards compatible"
-echo "2) Minor (0.1.0) - New features, backwards compatible" 
-echo "3) Major (1.0.0) - Breaking changes"
-echo "4) Skip version bump (testing only)"
+echo "1) Patch - Bug fixes"
+echo "2) Minor - New features"
+echo "3) Major - Breaking changes"
+echo "4) Skip version bump"
 read -p "Enter choice (1-4): " VERSION_CHOICE
 
 NEW_VERSION=""
 case $VERSION_CHOICE in
     1)
-        echo "🔧 Bumping patch version..."
         npm version patch --no-git-tag-version
-        NEW_VERSION=$(node -p "require('./package.json').version")
-        echo "New version: $NEW_VERSION"
         ;;
     2)
-        echo "✨ Bumping minor version..."
         npm version minor --no-git-tag-version
-        NEW_VERSION=$(node -p "require('./package.json').version")
-        echo "New version: $NEW_VERSION"
         ;;
     3)
-        echo "💥 Bumping major version..."
         npm version major --no-git-tag-version
-        NEW_VERSION=$(node -p "require('./package.json').version")
-        echo "New version: $NEW_VERSION"
         ;;
     4)
-        echo "⏭️  Skipping version bump..."
-        NEW_VERSION=$CURRENT_VERSION
+        echo "Skipping version bump"
         ;;
     *)
         echo "❌ Invalid choice. Exiting."
@@ -109,14 +82,12 @@ case $VERSION_CHOICE in
         ;;
 esac
 
-# Step 4: Release Process
-echo ""
-echo "🔄 Step 4: Release Process"
+NEW_VERSION=$(node -p "require('./package.json').version")
+echo "Selected version: $NEW_VERSION"
 
+# If version bumped, create new changelog section automatically
 if [ "$VERSION_CHOICE" != "4" ]; then
-    echo "📝 Auto-updating CHANGELOG.md with new version section..."
-    
-    # Create the new version section
+    echo "\n📝 Auto-updating CHANGELOG.md with new version section..."
     CURRENT_DATE=$(date +%Y-%m-%d)
     NEW_SECTION="## [${NEW_VERSION}] - ${CURRENT_DATE}
 
@@ -129,103 +100,56 @@ if [ "$VERSION_CHOICE" != "4" ]; then
 ### 🗑️ Removed
 
 "
-    
-    # Insert the new section after [Unreleased] section
+
     awk -v new_section="$NEW_SECTION" '
     /^## \[Unreleased\]/ {
-        # Print [Unreleased] section
         print $0
-        # Read and print everything until next ## section
         while ((getline) && !/^## \[/) {
             print $0
         }
-        # Print the new version section
         printf "%s", new_section
-        # Print the current line (which should be the next ## section)
         print $0
         next
     }
     { print }
     ' CHANGELOG.md > CHANGELOG.tmp && mv CHANGELOG.tmp CHANGELOG.md
-    
+
     echo "✅ Created new version section [${NEW_VERSION}] in CHANGELOG.md"
-    echo ""
-    echo "📋 Next step: Copy your changes from [Unreleased] to [${NEW_VERSION}]"
-    echo "   1. Open CHANGELOG.md in your editor"
-    echo "   2. Copy items from [Unreleased] sections to [${NEW_VERSION}] sections"  
-    echo "   3. Clear the [Unreleased] sections (leave categories but remove content)"
-    echo "   4. Save the file"
-    echo ""
+    echo "\nPlease copy your items from [Unreleased] to the new [${NEW_VERSION}] section, then clear [Unreleased]."
     read -p "Press Enter when CHANGELOG.md is updated..."
-    
-    # Commit version changes on current branch
-    git add package.json CHANGELOG.md
-    git commit -m "chore: release v${NEW_VERSION}"
-    
-    # Create tag
-    git tag "v${NEW_VERSION}"
-    echo "✅ Created tag v${NEW_VERSION}"
+
+    git add package.json CHANGELOG.md package-lock.json 2>/dev/null || git add package.json CHANGELOG.md package-lock.json || true
+    git commit -m "chore: release v${NEW_VERSION}" || echo "No changes to commit for package.json/CHANGELOG.md"
+    git tag "v${NEW_VERSION}" || echo "Tag v${NEW_VERSION} already exists or tagging failed"
 fi
 
-# Branch hierarchy deployment
-echo ""
-echo "🌳 Starting branch hierarchy deployment..."
+echo "\n🌳 Promoting 'local' → 'test' → 'main'..."
 
-if [ "$CURRENT_BRANCH" == "local-pj" ] || [[ "$CURRENT_BRANCH" == feature* ]]; then
-    echo "1️⃣ Pushing current branch changes..."
-    git push origin $CURRENT_BRANCH
-    
-    echo "2️⃣ Merging to local branch..."
-    git checkout local
-    git merge $CURRENT_BRANCH
-    git push origin local
-    
-    echo "3️⃣ Merging to test branch..."
-    git checkout test  
-    git merge local
-    git push origin test
-    
-    echo "4️⃣ Merging to main branch..."
-    git checkout main
-    git merge test
-    
-    if [ "$VERSION_CHOICE" != "4" ]; then
-        git push origin main --tags
-        echo "✅ Pushed to main with tags"
-    else
-        git push origin main
-        echo "✅ Pushed to main"
-    fi
-    
-    # Return to original branch
-    git checkout $CURRENT_BRANCH
-    
-elif [ "$CURRENT_BRANCH" == "main" ]; then
-    if [ "$VERSION_CHOICE" != "4" ]; then
-        git push origin main --tags
-    else
-        git push origin main
-    fi
-    echo "✅ Updated main branch"
+# Push local
+git push origin local
+
+# Merge to test
+git checkout test || (echo "Test branch not found locally; creating from origin/test" && git checkout -b test origin/test)
+git merge --no-ff local -m "chore: merge local into test for release v${NEW_VERSION}"
+git push origin test
+
+# Merge to main
+git checkout main || (echo "Main branch not found locally; creating from origin/main" && git checkout -b main origin/main)
+git merge --no-ff test -m "chore: promote test to main for release v${NEW_VERSION}"
+
+if [ "$VERSION_CHOICE" != "4" ]; then
+    git push origin main --tags
 else
-    echo "⚠️  Manual push required for branch: $CURRENT_BRANCH"
-    echo "Run: git push origin $CURRENT_BRANCH"
+    git push origin main
 fi
 
-echo ""
-echo "🎉 Deployment preparation complete!"
-echo ""
-echo "📊 Summary:"
-echo "- Branch: $CURRENT_BRANCH"
+# Return to local
+git checkout local
+
+echo "\n🎉 Deployment preparation complete!"
+echo "\nSummary:"
+echo "- Branch: local"
 echo "- Version: $(node -p "require('./package.json').version")"
-echo "- Status: Ready for production"
-echo ""
-echo "🌐 Next steps:"
-echo "1. Monitor Vercel dashboard for automatic deployment"
-echo "2. Test the deployed application"
-echo "3. Verify authentication and functionality"
-echo "4. Update OAuth redirect URLs if needed"
-echo ""
-echo "🔗 Useful links:"
-echo "- Vercel Dashboard: https://vercel.com/dashboard"
-echo "- Deployment Status: Check your project in Vercel"
+echo "- Status: Pushed and promoted local→test→main"
+
+echo "\nNext steps: Monitor Vercel for build, test the deployed app, and verify authentication and functionality."

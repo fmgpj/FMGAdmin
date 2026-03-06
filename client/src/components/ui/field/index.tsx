@@ -20,7 +20,11 @@ const Field = ({
 
     return (
         <input
-            style={fieldStyles}
+            style={{
+                ...fieldStyles,
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+            }}
             className={fieldClasses}
             disabled={disabled}
             {...props}
