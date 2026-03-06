@@ -5,4 +5,10 @@ export interface BreadcrumbLinkProps {
     source: "sidebar" | "page";
     className?: string;
     onClick?: () => void;
+    variant?: "filled" | "outlined";
+    isRounded?: boolean;
+    bgColor?: string;
+    color?: string;
+    size?: "small" | "medium" | "large";
+    fullWidth?: boolean;
 }
