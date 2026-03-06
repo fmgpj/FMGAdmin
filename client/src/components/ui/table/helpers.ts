@@ -4,28 +4,28 @@ import { TableColumn } from "@/src/types/table";
 export const TABLE_VARIANTS = {
     default: {
         container: "rounded-lg border border-gray-200 bg-white",
-        table: "w-full border-collapse min-w-max",
+        table: "w-full border-collapse min-w-max relative overflow-hidden",
         header: "bg-gray-50 border-b border-gray-200",
         headerText: "text-left font-semibold text-gray-700",
         row: "border-b border-gray-100 transition-colors duration-150 hover:bg-gray-50",
     },
     striped: {
         container: "rounded-lg border border-gray-200 bg-white",
-        table: "w-full border-collapse min-w-max",
+        table: "w-full border-collapse min-w-max relative overflow-hidden",
         header: "bg-blue-50 border-b border-blue-100",
         headerText: "text-left font-semibold text-gray-700",
         row: "border-b border-gray-100 transition-colors duration-150",
     },
     bordered: {
         container: "rounded-lg border border-gray-200 bg-white",
-        table: "w-full border-collapse min-w-max border border-gray-300",
+        table: "w-full border-collapse min-w-max border border-gray-300 relative overflow-hidden",
         header: "bg-gray-100 border-b-2 border-gray-200",
         headerText: "text-left font-semibold text-gray-700 font-bold",
         row: "border-b border-gray-100 transition-colors duration-150 border-gray-200 hover:bg-gray-50",
     },
     compact: {
         container: "rounded-lg border border-gray-200 bg-gray-50",
-        table: "w-full border-collapse min-w-max text-xs",
+        table: "w-full border-collapse min-w-max text-xs relative overflow-hidden",
         header: "bg-gray-200 border-b border-gray-300",
         headerText:
             "text-left font-semibold text-gray-600 uppercase text-xs tracking-wider",
@@ -33,7 +33,7 @@ export const TABLE_VARIANTS = {
     },
     elevated: {
         container: "rounded-xl shadow-xl border border-gray-100 bg-white",
-        table: "w-full border-collapse min-w-max",
+        table: "w-full border-collapse min-w-max relative overflow-hidden",
         header: "bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-gray-100",
         headerText: "text-left font-semibold text-gray-800 tracking-tight",
         row: "border-b border-gray-100 transition-colors duration-150 hover:bg-blue-25 hover:shadow-sm",

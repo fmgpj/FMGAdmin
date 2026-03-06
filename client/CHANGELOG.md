@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
 - Additional styling for breadcrumbs
 - Spacing and sizing adjustment on dropdown component
 - Adjust spacing and padding on feild component
+- Adjustment on table's height, makes it fit to screen
 
 ### 🐛 Fixed
 
