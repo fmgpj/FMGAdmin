@@ -123,20 +123,26 @@ const Page = () => {
                         label: "Actions",
                         style: { minWidth: "100px" },
                         searchable: false,
-                        render: () => (
+                        render: (_value, row) => (
                             <div className="flex flex-row items-center gap-x-2">
-                                <Button
+                                <BreadcrumbLink
+                                    path={`/department/${String((row as { id: number }).id)}`}
+                                    label="View Department"
+                                    source="page"
                                     color="#565555"
                                     className="cursor-pointer"
                                 >
                                     <FontAwesomeIcon icon={faEye} />
-                                </Button>
-                                <Button
+                                </BreadcrumbLink>
+                                <BreadcrumbLink
+                                    path={`/department/${String((row as { id: number }).id)}/edit`}
+                                    label="Edit Department"
+                                    source="page"
                                     color="#565555"
                                     className="cursor-pointer"
                                 >
                                     <FontAwesomeIcon icon={faPencil} />
-                                </Button>
+                                </BreadcrumbLink>
                             </div>
                         ),
                     },
