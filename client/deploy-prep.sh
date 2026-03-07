@@ -118,7 +118,7 @@ if [ "$VERSION_CHOICE" != "4" ]; then
     echo "\nPlease copy your items from [Unreleased] to the new [${NEW_VERSION}] section, then clear [Unreleased]."
     read -p "Press Enter when CHANGELOG.md is updated..."
 
-    git add package.json CHANGELOG.md 2>/dev/null || git add package.json CHANGELOG.md package-lock.json || true
+    git add package.json CHANGELOG.md package-lock.json 2>/dev/null || git add package.json CHANGELOG.md package-lock.json || true
     git commit -m "chore: release v${NEW_VERSION}" || echo "No changes to commit for package.json/CHANGELOG.md"
     git tag "v${NEW_VERSION}" || echo "Tag v${NEW_VERSION} already exists or tagging failed"
 fi

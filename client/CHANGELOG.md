@@ -6,6 +6,16 @@ All notable changes to this project will be documented in this file.
 
 ### 🚀 Added
 
+### 🔄 Changed
+
+### 🐛 Fixed
+
+### 🗑️ Removed
+
+## [1.0.4] - 2026-03-07
+
+### 🚀 Added
+
 - Form UI for department with basic validation and on submit function
 - Added ellipsis on overlapping text in dropdown component
 - Added ellipsis on overlapping text in field component
@@ -19,7 +29,6 @@ All notable changes to this project will be documented in this file.
 - Adjustment on table's height, makes it fit to screen
 
 ### 🐛 Fixed
-
 
 ### 🗑️ Removed
 
