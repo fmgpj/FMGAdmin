@@ -12,6 +12,18 @@ All notable changes to this project will be documented in this file.
 
 ### 🗑️ Removed
 
+## [1.0.5] - 2026-03-07
+
+### 🚀 Added
+
+### 🔄 Changed
+
+- Refactor folder contents and structure for better readability
+
+### 🐛 Fixed
+
+### 🗑️ Removed
+
 ## [1.0.4] - 2026-03-07
 
 ### 🚀 Added

@@ -4,37 +4,68 @@ import { BreadcrumbLink } from "@/src/components/ui/breadcrumbs/BreadcrumbLink";
 import Button from "@/src/components/ui/button";
 import Dropdown from "@/src/components/ui/dropdown";
 import Field from "@/src/components/ui/field";
-import { useBreadcrumb } from "@/src/hooks/useBreadcrumbs";
+import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 
-type FormData = {
+type DepartmentFormMode = "create" | "edit" | "view";
+
+export type DepartmentFormData = {
     name: string;
-    email: number;
+    email: string;
 };
 
-const Page = () => {
-    // Use custom label for better breadcrumb display
-    useBreadcrumb("Create Department");
+type DepartmentFormProps = {
+    mode: DepartmentFormMode;
+    title: string;
+    initialValues?: Partial<DepartmentFormData>;
+    onSubmit?: (data: DepartmentFormData) => void;
+    cancelPath?: string;
+    submitLabel?: string;
+};
+
+const DepartmentForm = ({
+    mode,
+    title,
+    initialValues,
+    onSubmit,
+    cancelPath = "/department",
+    submitLabel,
+}: DepartmentFormProps) => {
+    const isReadOnly = mode === "view";
+
     const {
         register,
         control,
         handleSubmit,
+        reset,
         formState: { errors },
-    } = useForm<FormData>({
+    } = useForm<DepartmentFormData>({
         defaultValues: {
-            name: "",
-            email: undefined,
+            name: initialValues?.name ?? "",
+            email: initialValues?.email ?? "",
         },
         mode: "onBlur",
     });
 
+    useEffect(() => {
+        reset({
+            name: initialValues?.name ?? "",
+            email: initialValues?.email ?? "",
+        });
+    }, [initialValues, reset]);
+
+    const handleFormSubmit = handleSubmit((data) => {
+        if (isReadOnly) return;
+        onSubmit?.(data);
+    });
+
     return (
         <div className="flex flex-col px-4 gap-y-5 h-full">
-            <p className="text-xl font-semibold">Create department</p>
+            <p className="text-xl font-semibold">{title}</p>
             <form
                 className="flex flex-col gap-y-4 overflow-hidden max-h-screen"
                 autoComplete="off"
-                onSubmit={handleSubmit((data) => console.log(data))}
+                onSubmit={handleFormSubmit}
             >
                 <div className="w-full bg-white p-4 rounded-lg shadow-md flex flex-col overflow-y-auto max-h-screen min-h-125">
                     <div className="flex flex-col md:flex-row gap-3">
@@ -44,8 +75,11 @@ const Page = () => {
                                 <Field
                                     variant="outlined"
                                     isRounded
+                                    disabled={isReadOnly}
                                     {...register("name", {
-                                        required: "Name is required",
+                                        required: isReadOnly
+                                            ? false
+                                            : "Name is required",
                                     })}
                                 />
                                 {errors.name?.message && (
@@ -61,11 +95,17 @@ const Page = () => {
                                 <Controller
                                     name="email"
                                     control={control}
-                                    rules={{ required: "Email is required" }}
+                                    rules={{
+                                        required: isReadOnly
+                                            ? false
+                                            : "Email is required",
+                                    }}
                                     render={({ field }) => (
                                         <Dropdown
-                                            {...field}
+                                            value={field.value}
+                                            onChange={field.onChange}
                                             isRounded
+                                            disabled={isReadOnly}
                                             options={[
                                                 {
                                                     label: "pj.judan@flowmetricaccounting.group",
@@ -93,26 +133,29 @@ const Page = () => {
                         variant="filled"
                         bgColor="#dfdfdf"
                         color="#29377E"
-                        path="/department"
+                        path={cancelPath}
                         label="Departments"
                         source="page"
                         className="h-10 min-w-30 rounded-sm flex items-center justify-center"
                     >
-                        Cancel
+                        {isReadOnly ? "Back" : "Cancel"}
                     </BreadcrumbLink>
-                    <Button
-                        type="submit"
-                        variant="filled"
-                        size="medium"
-                        bgColor="#29377E"
-                        className="min-w-30 cursor-pointer"
-                    >
-                        Save
-                    </Button>
+                    {!isReadOnly && (
+                        <Button
+                            type="submit"
+                            variant="filled"
+                            size="medium"
+                            bgColor="#29377E"
+                            className="min-w-30 cursor-pointer"
+                        >
+                            {submitLabel ||
+                                (mode === "edit" ? "Update" : "Save")}
+                        </Button>
+                    )}
                 </div>
             </form>
         </div>
     );
 };
 
-export default Page;
+export default DepartmentForm;
