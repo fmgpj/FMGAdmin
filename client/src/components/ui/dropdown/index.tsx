@@ -158,6 +158,8 @@ const Dropdown = ({
                         top: "100%",
                         left: 0,
                         right: 0,
+                        maxHeight: "200px",
+                        overflowY: "auto",
                         backgroundColor: "#FFFFFF",
                         border: "1px solid #d1d5db",
                         borderRadius: "4px",
