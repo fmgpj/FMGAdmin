@@ -40,11 +40,16 @@ export interface TableColumn<T = unknown> {
     searchable?: boolean;
 }
 
-
 interface TableProps<T> {
     data: T[];
     columns: TableColumn<T>[];
-    variant?: "striped" | "bordered" | "compact" | "elevated";
+    variant?:
+        | "default"
+        | "striped"
+        | "bordered"
+        | "compact"
+        | "elevated"
+        | "borderless";
     size?: "small" | "medium" | "large";
     pagination?: boolean;
     itemsPerPage?: number;

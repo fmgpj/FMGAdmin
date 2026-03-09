@@ -36,7 +36,7 @@ const Page = () => {
             title="View department"
             initialValues={{
                 name: department.name,
-                email: department.email,
+                employee_id: department.email,
             }}
         />
     );

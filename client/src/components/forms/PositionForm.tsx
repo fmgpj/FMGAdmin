@@ -4,33 +4,34 @@ import { BreadcrumbLink } from "@/src/components/ui/breadcrumbs/BreadcrumbLink";
 import Button from "@/src/components/ui/button";
 import Dropdown from "@/src/components/ui/dropdown";
 import Field from "@/src/components/ui/field";
+import { departments } from "@/src/data/departments";
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 
 type Mode = "create" | "edit" | "view";
 
-export type DepartmentFormData = {
+export type PositionFormData = {
     name: string;
-    employee_id: string;
+    department_id: string | "";
 };
 
-type DepartmentFormProps = {
+type PositionFormProps = {
     mode: Mode;
     title: string;
-    initialValues?: Partial<DepartmentFormData>;
-    onSubmit?: (data: DepartmentFormData) => void;
+    initialValues?: Partial<PositionFormData>;
+    onSubmit?: (data: PositionFormData) => void;
     cancelPath?: string;
     submitLabel?: string;
 };
 
-const DepartmentForm = ({
+const PositionForm = ({
     mode,
     title,
     initialValues,
     onSubmit,
-    cancelPath = "/department",
+    cancelPath = "/position",
     submitLabel,
-}: DepartmentFormProps) => {
+}: PositionFormProps) => {
     const isReadOnly = mode === "view";
 
     const {
@@ -39,10 +40,10 @@ const DepartmentForm = ({
         handleSubmit,
         reset,
         formState: { errors },
-    } = useForm<DepartmentFormData>({
+    } = useForm<PositionFormData>({
         defaultValues: {
             name: initialValues?.name ?? "",
-            employee_id: initialValues?.employee_id ?? "",
+            department_id: initialValues?.department_id ?? "",
         },
         mode: "onBlur",
     });
@@ -50,7 +51,7 @@ const DepartmentForm = ({
     useEffect(() => {
         reset({
             name: initialValues?.name ?? "",
-            employee_id: initialValues?.employee_id ?? "",
+            department_id: initialValues?.department_id ?? "",
         });
     }, [initialValues, reset]);
 
@@ -69,12 +70,44 @@ const DepartmentForm = ({
             >
                 <div className="w-full bg-white p-4 rounded-lg shadow-md flex flex-col overflow-y-auto max-h-screen min-h-125">
                     <div className="flex flex-col md:flex-row gap-2">
-                        <div className="w-full md:w-1/2 flex flex-col">
+                        <div className="w-full md:w-1/2 flex flex-col gap-y-1">
+                            <p className="text-sm">Department</p>
+                            <div className="flex flex-col">
+                                <Controller
+                                    name="department_id"
+                                    control={control}
+                                    rules={{
+                                        required: isReadOnly
+                                            ? false
+                                            : "Department is required",
+                                    }}
+                                    render={({ field }) => (
+                                        <Dropdown
+                                            value={field.value}
+                                            onChange={field.onChange}
+                                            isRounded
+                                            disabled={isReadOnly}
+                                            options={departments.map(
+                                                (department) => ({
+                                                    label: department.name,
+                                                    value: department.id,
+                                                })
+                                            )}
+                                        />
+                                    )}
+                                />
+                                {errors.department_id?.message && (
+                                    <p className="text-sm text-right pr-3 text-red-400">
+                                        {errors.department_id.message}
+                                    </p>
+                                )}
+                            </div>
+                        </div>
+                        <div className="w-full md:w-1/2 flex flex-col gap-y-1">
                             <p className="text-sm">Name</p>
                             <div className="flex flex-col">
                                 <Field
                                     variant="outlined"
-                                    // color="#565555"
                                     isRounded
                                     disabled={isReadOnly}
                                     {...register("name", {
@@ -90,43 +123,6 @@ const DepartmentForm = ({
                                 )}
                             </div>
                         </div>
-                        <div className="w-full md:w-1/2 flex flex-col">
-                            <p className="text-sm">Email</p>
-                            <div className="flex flex-col">
-                                <Controller
-                                    name="employee_id"
-                                    control={control}
-                                    rules={{
-                                        required: isReadOnly
-                                            ? false
-                                            : "Email is required",
-                                    }}
-                                    render={({ field }) => (
-                                        <Dropdown
-                                            value={field.value}
-                                            onChange={field.onChange}
-                                            isRounded
-                                            disabled={isReadOnly}
-                                            options={[
-                                                {
-                                                    label: "pj.judan@flowmetricaccounting.group",
-                                                    value: 1,
-                                                },
-                                                {
-                                                    label: "judyann.vibal@flowmetricaccounting.group",
-                                                    value: 2,
-                                                },
-                                            ]}
-                                        />
-                                    )}
-                                />
-                                {errors.employee_id?.message && (
-                                    <p className="text-sm text-right pr-3 text-red-400">
-                                        {errors.employee_id.message}
-                                    </p>
-                                )}
-                            </div>
-                        </div>
                     </div>
                 </div>
                 <div className="flex flex-row items-center justify-end gap-x-3">
@@ -135,7 +131,7 @@ const DepartmentForm = ({
                         bgColor="#dfdfdf"
                         color="#29377E"
                         path={cancelPath}
-                        label="Departments"
+                        label="Position"
                         source="page"
                         className="h-10 min-w-30 rounded-sm flex items-center justify-center"
                     >
@@ -159,4 +155,4 @@ const DepartmentForm = ({
     );
 };
 
-export default DepartmentForm;
+export default PositionForm;
