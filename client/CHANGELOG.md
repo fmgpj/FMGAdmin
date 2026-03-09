@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 ### 🚀 Added
 
 - Additional variant for table (borderless)
+- Add position page with initial data seed and list, view and edit page
 
 ### 🔄 Changed
 
