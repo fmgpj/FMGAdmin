@@ -8,6 +8,8 @@ All notable changes to this project will be documented in this file.
 
 ### 🔄 Changed
 
+- Change field component's default text color to #565555
+
 ### 🐛 Fixed
 
 ### 🗑️ Removed
