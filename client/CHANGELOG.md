@@ -6,6 +6,8 @@ All notable changes to this project will be documented in this file.
 
 ### 🚀 Added
 
+- Additional variant for table (borderless)
+
 ### 🔄 Changed
 
 - Change field component's default text color to #565555
