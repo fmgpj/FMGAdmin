@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 ### 🔄 Changed
 
 - Change field component's default text color to #565555
+- Implement table component for all cards with table in dashboard page
 
 ### 🐛 Fixed
 
