@@ -38,6 +38,13 @@ export const TABLE_VARIANTS = {
         headerText: "text-left font-semibold text-gray-800 tracking-tight",
         row: "border-b border-gray-100 transition-colors duration-150 hover:bg-blue-25 hover:shadow-sm",
     },
+    borderless: {
+        container: "bg-transparent border-0 rounded-none",
+        table: "w-full border-collapse min-w-max relative overflow-hidden",
+        header: "bg-gray-100 border-b border-gray-200",
+        headerText: "text-left font-semibold text-gray-700",
+        row: "border-b border-gray-100 transition-colors duration-150 hover:bg-gray-50",
+    },
 } as const;
 
 export type TableVariant = keyof typeof TABLE_VARIANTS;

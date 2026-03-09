@@ -12,6 +12,24 @@ All notable changes to this project will be documented in this file.
 
 ### 🗑️ Removed
 
+## [1.1.0] - 2026-03-10
+
+### 🚀 Added
+
+- Additional variant for table (borderless)
+- Add position page with initial data seed and list, view and edit page
+
+### 🔄 Changed
+
+- Change field component's default text color to #565555
+- Implement table component for all cards with table in dashboard page
+- Minor adjustment on initial data seed of deparmtent
+- Minor adjustment of the department's spacing 
+
+### 🐛 Fixed
+
+### 🗑️ Removed
+
 ## [1.0.5] - 2026-03-07
 
 ### 🚀 Added

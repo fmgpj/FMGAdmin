@@ -6,7 +6,7 @@ export const departments = [
         email: "accounting@flowmetricaccounting.group",
         status: "Active",
         created_by: "Paul John Judan",
-        actions: 2,
+        actions: 1,
     },
     {
         id: 2,
@@ -22,7 +22,7 @@ export const departments = [
         email: "it@flowmetricaccounting.group",
         status: "Inactive",
         created_by: "John Doe",
-        actions: 2,
+        actions: 3,
     },
     {
         id: 4,
@@ -30,7 +30,7 @@ export const departments = [
         email: "marketing@flowmetricaccounting.group",
         status: "Active",
         created_by: "Sarah Johnson",
-        actions: 2,
+        actions: 4,
     },
     {
         id: 5,
@@ -38,7 +38,7 @@ export const departments = [
         email: "sales@flowmetricaccounting.group",
         status: "Active",
         created_by: "Mike Wilson",
-        actions: 2,
+        actions: 5,
     },
     {
         id: 6,
@@ -46,7 +46,7 @@ export const departments = [
         email: "finance@flowmetricaccounting.group",
         status: "Active",
         created_by: "Emily Davis",
-        actions: 2,
+        actions: 6,
     },
     {
         id: 7,
@@ -54,7 +54,7 @@ export const departments = [
         email: "operations@flowmetricaccounting.group",
         status: "Active",
         created_by: "Robert Brown",
-        actions: 2,
+        actions: 7,
     },
     {
         id: 8,
@@ -62,7 +62,7 @@ export const departments = [
         email: "legal@flowmetricaccounting.group",
         status: "Active",
         created_by: "Jennifer Martinez",
-        actions: 2,
+        actions: 8,
     },
     {
         id: 9,
@@ -70,7 +70,7 @@ export const departments = [
         email: "customerservice@flowmetricaccounting.group",
         status: "Active",
         created_by: "David Anderson",
-        actions: 2,
+        actions: 9,
     },
     {
         id: 10,
@@ -78,7 +78,7 @@ export const departments = [
         email: "rnd@flowmetricaccounting.group",
         status: "Active",
         created_by: "Lisa Thompson",
-        actions: 2,
+        actions: 10,
     },
     {
         id: 11,
@@ -86,7 +86,7 @@ export const departments = [
         email: "qa@flowmetricaccounting.group",
         status: "Active",
         created_by: "Chris Garcia",
-        actions: 2,
+        actions: 11,
     },
     {
         id: 12,
@@ -94,7 +94,7 @@ export const departments = [
         email: "procurement@flowmetricaccounting.group",
         status: "Active",
         created_by: "Amanda Rodriguez",
-        actions: 2,
+        actions: 12,
     },
     {
         id: 13,
@@ -102,7 +102,7 @@ export const departments = [
         email: "training@flowmetricaccounting.group",
         status: "Inactive",
         created_by: "Kevin Lee",
-        actions: 2,
+        actions: 13,
     },
     {
         id: 14,
@@ -110,7 +110,7 @@ export const departments = [
         email: "compliance@flowmetricaccounting.group",
         status: "Active",
         created_by: "Nicole White",
-        actions: 2,
+        actions: 14,
     },
     {
         id: 15,
@@ -118,7 +118,7 @@ export const departments = [
         email: "bi@flowmetricaccounting.group",
         status: "Active",
         created_by: "Brian Clark",
-        actions: 2,
+        actions: 15,
     },
     {
         id: 16,
@@ -126,7 +126,7 @@ export const departments = [
         email: "pm@flowmetricaccounting.group",
         status: "Active",
         created_by: "Rachel Turner",
-        actions: 2,
+        actions: 16,
     },
     {
         id: 17,
@@ -134,7 +134,7 @@ export const departments = [
         email: "communications@flowmetricaccounting.group",
         status: "Active",
         created_by: "Jason Hall",
-        actions: 2,
+        actions: 17,
     },
     {
         id: 18,
@@ -142,7 +142,7 @@ export const departments = [
         email: "facilities@flowmetricaccounting.group",
         status: "Inactive",
         created_by: "Michelle Adams",
-        actions: 2,
+        actions: 18,
     },
     {
         id: 19,
@@ -150,7 +150,7 @@ export const departments = [
         email: "security@flowmetricaccounting.group",
         status: "Active",
         created_by: "Daniel Miller",
-        actions: 2,
+        actions: 19,
     },
     {
         id: 20,
@@ -158,7 +158,7 @@ export const departments = [
         email: "analytics@flowmetricaccounting.group",
         status: "Active",
         created_by: "Stephanie Baker",
-        actions: 2,
+        actions: 20,
     },
     {
         id: 21,
@@ -166,7 +166,7 @@ export const departments = [
         email: "supplychain@flowmetricaccounting.group",
         status: "Active",
         created_by: "Thomas Wright",
-        actions: 2,
+        actions: 21,
     },
     {
         id: 22,
@@ -174,7 +174,7 @@ export const departments = [
         email: "innovation@flowmetricaccounting.group",
         status: "Active",
         created_by: "Maria Gonzalez",
-        actions: 2,
+        actions: 22,
     },
     {
         id: 23,
@@ -182,7 +182,7 @@ export const departments = [
         email: "audit@flowmetricaccounting.group",
         status: "Active",
         created_by: "Anthony Taylor",
-        actions: 2,
+        actions: 23,
     },
     {
         id: 24,
@@ -190,7 +190,7 @@ export const departments = [
         email: "strategy@flowmetricaccounting.group",
         status: "Inactive",
         created_by: "Lauren King",
-        actions: 2,
+        actions: 24,
     },
     {
         id: 25,
@@ -198,7 +198,7 @@ export const departments = [
         email: "risk@flowmetricaccounting.group",
         status: "Active",
         created_by: "Matthew Scott",
-        actions: 2,
+        actions: 25,
     },
 ];
 

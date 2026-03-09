@@ -19,7 +19,7 @@ export const getFieldStyles = ({
 
 // Get text color
 export const getTextColor = (color?: string): string => {
-    return color ?? "#9f9fa9";
+    return color ?? "#565555";
 };
 
 // Get background color based on variant
