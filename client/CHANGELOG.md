@@ -6,6 +6,16 @@ All notable changes to this project will be documented in this file.
 
 ### 🚀 Added
 
+### 🔄 Changed
+
+### 🐛 Fixed
+
+### 🗑️ Removed
+
+## [1.1.0] - 2026-03-10
+
+### 🚀 Added
+
 - Additional variant for table (borderless)
 - Add position page with initial data seed and list, view and edit page
 
