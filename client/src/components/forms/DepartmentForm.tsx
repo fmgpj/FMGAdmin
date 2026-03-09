@@ -7,15 +7,15 @@ import Field from "@/src/components/ui/field";
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 
-type DepartmentFormMode = "create" | "edit" | "view";
+type Mode = "create" | "edit" | "view";
 
 export type DepartmentFormData = {
     name: string;
-    email: string;
+    employee_id: string;
 };
 
 type DepartmentFormProps = {
-    mode: DepartmentFormMode;
+    mode: Mode;
     title: string;
     initialValues?: Partial<DepartmentFormData>;
     onSubmit?: (data: DepartmentFormData) => void;
@@ -42,7 +42,7 @@ const DepartmentForm = ({
     } = useForm<DepartmentFormData>({
         defaultValues: {
             name: initialValues?.name ?? "",
-            email: initialValues?.email ?? "",
+            employee_id: initialValues?.employee_id ?? "",
         },
         mode: "onBlur",
     });
@@ -50,7 +50,7 @@ const DepartmentForm = ({
     useEffect(() => {
         reset({
             name: initialValues?.name ?? "",
-            email: initialValues?.email ?? "",
+            employee_id: initialValues?.employee_id ?? "",
         });
     }, [initialValues, reset]);
 
@@ -68,12 +68,13 @@ const DepartmentForm = ({
                 onSubmit={handleFormSubmit}
             >
                 <div className="w-full bg-white p-4 rounded-lg shadow-md flex flex-col overflow-y-auto max-h-screen min-h-125">
-                    <div className="flex flex-col md:flex-row gap-3">
-                        <div className="w-full md:w-1/2 flex flex-col gap-y-1">
+                    <div className="flex flex-col md:flex-row gap-2">
+                        <div className="w-full md:w-1/2 flex flex-col">
                             <p className="text-sm">Name</p>
                             <div className="flex flex-col">
                                 <Field
                                     variant="outlined"
+                                    // color="#565555"
                                     isRounded
                                     disabled={isReadOnly}
                                     {...register("name", {
@@ -83,17 +84,17 @@ const DepartmentForm = ({
                                     })}
                                 />
                                 {errors.name?.message && (
-                                    <p className="text-sm text-right pr-3 text-red-600 mt-1">
+                                    <p className="text-sm text-right pr-3 text-red-400">
                                         {errors.name.message}
                                     </p>
                                 )}
                             </div>
                         </div>
-                        <div className="w-full md:w-1/2 flex flex-col gap-y-1">
+                        <div className="w-full md:w-1/2 flex flex-col">
                             <p className="text-sm">Email</p>
                             <div className="flex flex-col">
                                 <Controller
-                                    name="email"
+                                    name="employee_id"
                                     control={control}
                                     rules={{
                                         required: isReadOnly
@@ -112,16 +113,16 @@ const DepartmentForm = ({
                                                     value: 1,
                                                 },
                                                 {
-                                                    label: "judayann.vibal@flowmetricaccounting.group",
+                                                    label: "judyann.vibal@flowmetricaccounting.group",
                                                     value: 2,
                                                 },
                                             ]}
                                         />
                                     )}
                                 />
-                                {errors.email?.message && (
-                                    <p className="text-sm text-right pr-3 text-red-600 mt-1">
-                                        {errors.email.message}
+                                {errors.employee_id?.message && (
+                                    <p className="text-sm text-right pr-3 text-red-400">
+                                        {errors.employee_id.message}
                                     </p>
                                 )}
                             </div>

@@ -12,6 +12,8 @@ All notable changes to this project will be documented in this file.
 
 - Change field component's default text color to #565555
 - Implement table component for all cards with table in dashboard page
+- Minor adjustment on initial data seed of deparmtent
+- Minor adjustment of the department's spacing 
 
 ### 🐛 Fixed
 
