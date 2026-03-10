@@ -6,6 +6,8 @@ All notable changes to this project will be documented in this file.
 
 ### 🚀 Added
 
+- New feature (service module) with basic functionality and initial pages (list, create, update & view)
+
 ### 🔄 Changed
 
 ### 🐛 Fixed
