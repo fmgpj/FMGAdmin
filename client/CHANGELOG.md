@@ -12,6 +12,20 @@ All notable changes to this project will be documented in this file.
 
 ### 🗑️ Removed
 
+## [1.2.0] - 2026-03-10
+
+### 🚀 Added
+
+- New feature (service module) with basic functionality and initial pages (list, create, update & view)
+- Add department column on position table
+- Add another filter on position table (by department)
+
+### 🔄 Changed
+
+### 🐛 Fixed
+
+### 🗑️ Removed
+
 ## [1.1.0] - 2026-03-10
 
 ### 🚀 Added
@@ -23,6 +37,7 @@ All notable changes to this project will be documented in this file.
 
 - Change field component's default text color to #565555
 - Implement table component for all cards with table in dashboard page
+- Apply active state for nested navigation of sidebar
 - Minor adjustment on initial data seed of deparmtent
 - Minor adjustment of the department's spacing 
 

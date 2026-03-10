@@ -58,6 +58,11 @@ export const navs = [
                 href: "/project",
                 subNav: [],
             },
+            {
+                label: "Services",
+                href: "/service",
+                subNav: [],
+            },
         ],
     },
     {

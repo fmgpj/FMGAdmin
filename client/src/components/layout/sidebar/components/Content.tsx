@@ -11,6 +11,14 @@ type ContentProps = {
 const Content = ({ nav, index, setDropdownOpen }: ContentProps) => {
     const pathname = usePathname();
 
+    const isActivePath = (targetHref: string) => {
+        if (targetHref === "/") {
+            return pathname === "/";
+        }
+
+        return pathname === targetHref || pathname.startsWith(`${targetHref}/`);
+    };
+
     return (
         <div className="flex flex-col gap-y-2" key={index}>
             {nav.label !== "" && (
@@ -30,9 +38,9 @@ const Content = ({ nav, index, setDropdownOpen }: ContentProps) => {
                         {links.subNav.length > 0 ? (
                             <p
                                 className={`font-semibold flex flex-row items-center cursor-pointer  justify-between text-sm ${
-                                    links.subNav.some(
-                                        (subNav) => pathname === subNav.href
-                                    )
+                                    links.subNav.some((subNav) =>
+                                        isActivePath(subNav.href)
+                                    ) || isActivePath(links.href)
                                         ? "text-[#25303d]"
                                         : "text-[#5e6382]"
                                 } hover:text-[#25303d]`}
@@ -43,7 +51,7 @@ const Content = ({ nav, index, setDropdownOpen }: ContentProps) => {
                             <BreadcrumbLink
                                 path={links.href}
                                 color={
-                                    pathname === links.href
+                                    isActivePath(links.href)
                                         ? "#25303d"
                                         : "#5e6382"
                                 }
@@ -64,7 +72,7 @@ const Content = ({ nav, index, setDropdownOpen }: ContentProps) => {
                                         path={subNav.href}
                                         label={subNav.label}
                                         color={
-                                            pathname === subNav.href
+                                            isActivePath(subNav.href)
                                                 ? "#25303d"
                                                 : "#80849b"
                                         }

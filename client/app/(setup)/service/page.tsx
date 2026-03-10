@@ -5,8 +5,8 @@ import Button from "@/src/components/ui/button";
 import Dropdown from "@/src/components/ui/dropdown";
 import Field from "@/src/components/ui/field";
 import Table from "@/src/components/ui/table";
+import services from "@/src/data/services";
 import { useBreadcrumb } from "@/src/hooks/useBreadcrumbs";
-import { positions } from "@data/positions";
 import {
     faEye,
     faFilter,
@@ -32,7 +32,7 @@ const Page = () => {
 
     const departmentOptions = useMemo(() => {
         const uniqueDepartments = Array.from(
-            new Set(positions.map((position) => position.department_name))
+            new Set(services.map((service) => service.department_name))
         );
 
         return [
@@ -46,13 +46,13 @@ const Page = () => {
 
     // Filter the data based on status and department
     const filteredData = useMemo(() => {
-        let result = positions;
+        let result = services;
 
         // Apply status filter
         if (statusFilter) {
             result = result.filter(
-                (position) =>
-                    position.status.toLowerCase() ===
+                (service) =>
+                    service.status.toLowerCase() ===
                     statusFilter.toString().toLowerCase()
             );
         }
@@ -60,7 +60,7 @@ const Page = () => {
         // Apply department filter
         if (departmentFilter) {
             result = result.filter(
-                (position) => position.department_name === departmentFilter
+                (service) => service.department_name === departmentFilter
             );
         }
 
@@ -71,12 +71,12 @@ const Page = () => {
     return (
         <div className="flex flex-col px-4 gap-y-2 h-full">
             <div className="flex flex-col gap-y-3">
-                <p className="text-xl font-semibold">All positions</p>
+                <p className="text-xl font-semibold">All services</p>
                 <div className="flex flex-row items-center justify-between gap-x-10">
                     <Field
                         className="w-full sm:w-6/12 md:w-5/12"
                         variant="outlined"
-                        placeholder="Search position"
+                        placeholder="Search service"
                         isRounded
                         value={searchTerm}
                         onChange={(e: {
@@ -96,8 +96,8 @@ const Page = () => {
                             variant="filled"
                             bgColor="#29377E"
                             color="#FFFFFF"
-                            path="/position/create"
-                            label="Create Position"
+                            path="/service/create"
+                            label="Create Service"
                             source="page"
                             className="w-10 h-10 md:w-auto rounded-sm flex items-center justify-center cursor-pointer"
                         >
@@ -150,8 +150,8 @@ const Page = () => {
                         render: (_value, row) => (
                             <div className="flex flex-row items-center gap-x-2">
                                 <BreadcrumbLink
-                                    path={`/position/${String((row as { id: number }).id)}`}
-                                    label="View Position"
+                                    path={`/service/${String((row as { id: number }).id)}`}
+                                    label="View Service"
                                     source="page"
                                     color="#565555"
                                     className="cursor-pointer"
@@ -159,8 +159,8 @@ const Page = () => {
                                     <FontAwesomeIcon icon={faEye} />
                                 </BreadcrumbLink>
                                 <BreadcrumbLink
-                                    path={`/position/${String((row as { id: number }).id)}/edit`}
-                                    label="Edit Position"
+                                    path={`/service/${String((row as { id: number }).id)}/edit`}
+                                    label="Edit Service"
                                     source="page"
                                     color="#565555"
                                     className="cursor-pointer"
