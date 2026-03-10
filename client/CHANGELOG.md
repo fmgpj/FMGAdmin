@@ -7,8 +7,11 @@ All notable changes to this project will be documented in this file.
 ### 🚀 Added
 
 - New feature (service module) with basic functionality and initial pages (list, create, update & view)
+- Add department column on position table
+- Add another filter on position table (by department)
 
 ### 🔄 Changed
+
 
 ### 🐛 Fixed
 

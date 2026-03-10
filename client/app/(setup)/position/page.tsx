@@ -26,8 +26,25 @@ const Page = () => {
     // Filter modal state
     const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
     const [statusFilter, setStatusFilter] = useState<string | number>("");
+    const [departmentFilter, setDepartmentFilter] = useState<string | number>(
+        ""
+    );
 
-    // Filter the data based on status and search term
+    const departmentOptions = useMemo(() => {
+        const uniqueDepartments = Array.from(
+            new Set(positions.map((position) => position.department_name))
+        );
+
+        return [
+            { label: "All", value: "" },
+            ...uniqueDepartments.map((department) => ({
+                label: department,
+                value: department,
+            })),
+        ];
+    }, []);
+
+    // Filter the data based on status and department
     const filteredData = useMemo(() => {
         let result = positions;
 
@@ -40,9 +57,16 @@ const Page = () => {
             );
         }
 
+        // Apply department filter
+        if (departmentFilter) {
+            result = result.filter(
+                (position) => position.department_name === departmentFilter
+            );
+        }
+
         // The Table component will handle searchTerm filtering
         return result;
-    }, [statusFilter]);
+    }, [statusFilter, departmentFilter]);
 
     return (
         <div className="flex flex-col px-4 gap-y-2 h-full">
@@ -94,6 +118,12 @@ const Page = () => {
                 data={filteredData}
                 columns={[
                     { key: "id", label: "ID", style: { minWidth: "50px" } },
+                    {
+                        key: "department_name",
+                        label: "Department",
+                        style: { minWidth: "150px" },
+                        searchable: true,
+                    },
                     {
                         key: "name",
                         label: "Name",
@@ -153,11 +183,25 @@ const Page = () => {
                     <div className="absolute top-30 right-4 bg-white rounded-lg shadow-lg p-4 w-80 z-50">
                         <div className="mb-3">
                             <h3 className="text-sm font-semibold text-gray-800">
-                                Filter by Status
+                                Filters
                             </h3>
                         </div>
 
                         <div className="space-y-3">
+                            <div>
+                                <label className="block text-xs font-medium text-gray-600 mb-2">
+                                    Department
+                                </label>
+                                <Dropdown
+                                    value={departmentFilter}
+                                    onChange={(value) =>
+                                        setDepartmentFilter(value)
+                                    }
+                                    options={departmentOptions}
+                                    placeholder="Select department"
+                                />
+                            </div>
+
                             <div>
                                 <label className="block text-xs font-medium text-gray-600 mb-2">
                                     Status
@@ -183,6 +227,7 @@ const Page = () => {
                                 variant="outlined"
                                 onClick={() => {
                                     setStatusFilter("");
+                                    setDepartmentFilter("");
                                     setIsFilterModalOpen(false);
                                 }}
                                 className="text-xs px-3 py-1.5 cursor-pointer"
