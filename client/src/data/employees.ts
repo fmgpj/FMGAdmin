@@ -57,6 +57,17 @@ export const employees = [
         hire_date: "2023-02-18",
         phone: "+1 (555) 567-8901",
     },
+    {
+        id: 6,
+        name: "Judy Ann Vibal",
+        email: "judyann.vibal@flowmetricaccounting.group",
+        department: "IT Department",
+        position: "Senior Developer",
+        status: "Active",
+        avatar: Profile,
+        hire_date: "2023-02-18",
+        phone: "+1 (555) 567-8901",
+    },
 ];
 
 export default employees;
