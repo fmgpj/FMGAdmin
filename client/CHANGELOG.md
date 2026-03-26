@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 - Textarea component
 - Disabled design and functionality for dropdown component
 - Breadcrumb link ui design (button)
+- Hover effect on sidebar links
 
 ### 🔄 Changed
 - Authenticated design for the main component

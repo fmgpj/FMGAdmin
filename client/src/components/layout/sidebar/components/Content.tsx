@@ -50,17 +50,16 @@ const Content = ({ nav, index, setDropdownOpen }: ContentProps) => {
                         ) : (
                             <BreadcrumbLink
                                 path={links.href}
-                                color={
-                                    isActivePath(links.href)
-                                        ? "#25303d"
-                                        : "#5e6382"
-                                }
                                 label={links.label}
                                 source="sidebar"
                                 onClick={() =>
                                     setDropdownOpen && setDropdownOpen(false)
                                 }
-                                className="font-semibold flex flex-row items-center justify-between text-sm hover:text-[#25303d]"
+                                className={`font-semibold flex flex-row items-center justify-between text-sm hover:text-[#25303d] ${
+                                    isActivePath(links.href)
+                                        ? "text-[#25303d]"
+                                        : "text-[#5e6382]"
+                                }`}
                             >
                                 {links.label}
                             </BreadcrumbLink>
@@ -71,17 +70,16 @@ const Content = ({ nav, index, setDropdownOpen }: ContentProps) => {
                                     <BreadcrumbLink
                                         path={subNav.href}
                                         label={subNav.label}
-                                        color={
-                                            isActivePath(subNav.href)
-                                                ? "#25303d"
-                                                : "#80849b"
-                                        }
                                         source="sidebar"
                                         onClick={() =>
                                             setDropdownOpen &&
                                             setDropdownOpen(false)
                                         }
-                                        className="py-1.5 font-semibold flex flex-row items-center justify-between text-sm hover:text-[#25303d]"
+                                        className={`py-1.5 font-semibold flex flex-row items-center justify-between text-sm hover:text-[#25303d] ${
+                                            isActivePath(subNav.href)
+                                                ? "text-[#25303d]"
+                                                : "text-[#80849b]"
+                                        }`}
                                         key={subnavIndex}
                                     >
                                         {subNav.label}
