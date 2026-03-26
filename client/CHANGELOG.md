@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 - Datepicker component
 - Textarea component
 - Disabled design and functionality for dropdown component
+- Breadcrumb link ui design (button)
 
 ### 🔄 Changed
 
