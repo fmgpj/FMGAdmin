@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 - Created form builder for faster build of fields
 - Datepicker component
 - Textarea component
+- Disabled design and functionality for dropdown component
 
 ### 🔄 Changed
 
