@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 - Breadcrumb link ui design (button)
 
 ### 🔄 Changed
+- Authenticated design for the main component
 
 ### 🐛 Fixed
 
