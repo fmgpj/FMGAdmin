@@ -3,7 +3,7 @@
 import { DropdownOption, DropdownProps } from "@/src/types/dropdown";
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Field from "../field";
 import {
     filterOptions,
@@ -29,6 +29,7 @@ const Dropdown = ({
     const [isOpen, setIsOpen] = useState(false);
     const [highlightedIndex, setHighlightedIndex] = useState(-1);
     const [searchTerm, setSearchTerm] = useState("");
+    const isDropdownOpen = isOpen && !disabled;
 
     const selectedOption = getSelectedOption(options, value);
 
@@ -44,8 +45,37 @@ const Dropdown = ({
         setHighlightedIndex(-1);
     };
 
+    const closeDropdown = useCallback(() => {
+        setIsOpen(false);
+        setSearchTerm("");
+        setHighlightedIndex(-1);
+    }, []);
+
+    const handleTriggerClick = () => {
+        if (disabled) return;
+        if (isDropdownOpen) {
+            closeDropdown();
+            return;
+        }
+
+        setHighlightedIndex(-1);
+        setIsOpen(true);
+    };
+
     const handleKeyDown = (event: React.KeyboardEvent) => {
-        if (!isOpen || filteredOptions.length === 0) return;
+        if (disabled) {
+            if (
+                event.key === "Enter" ||
+                event.key === " " ||
+                event.key === "ArrowDown" ||
+                event.key === "ArrowUp"
+            ) {
+                event.preventDefault();
+            }
+            return;
+        }
+
+        if (!isDropdownOpen || filteredOptions.length === 0) return;
 
         switch (event.key) {
             case "ArrowDown":
@@ -72,9 +102,7 @@ const Dropdown = ({
                 break;
             case "Escape":
             case "Tab":
-                setIsOpen(false);
-                setHighlightedIndex(-1);
-                setSearchTerm("");
+                closeDropdown();
                 break;
         }
     };
@@ -85,46 +113,43 @@ const Dropdown = ({
                 dropdownRef.current &&
                 !dropdownRef.current.contains(event.target as Node)
             ) {
-                setIsOpen(false);
+                closeDropdown();
             }
         };
 
-        if (isOpen) {
+        if (isDropdownOpen) {
             document.addEventListener("mousedown", handleClickOutside);
         }
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
-    }, [isOpen]);
+    }, [isDropdownOpen, closeDropdown]);
 
     useEffect(() => {
-        if (isOpen && searchable && searchInputRef.current) {
-            setTimeout(() => {
-                searchInputRef.current?.focus();
-            }, 50);
-        }
-    }, [isOpen, searchable]);
+        if (!isDropdownOpen || !searchable || !searchInputRef.current) return;
 
-    // Reset highlighted index when dropdown opens
-    useEffect(() => {
-        if (isOpen) {
-            // eslint-disable-next-line react-hooks/set-state-in-effect
-            setHighlightedIndex(-1);
-        }
-    }, [isOpen]);
+        const focusTimeoutId = window.setTimeout(() => {
+            searchInputRef.current?.focus();
+        }, 50);
+
+        return () => {
+            window.clearTimeout(focusTimeoutId);
+        };
+    }, [isDropdownOpen, searchable]);
 
     return (
         <div className="relative" ref={dropdownRef}>
             <div
                 className="focus:outline-none"
-                onClick={() => setIsOpen(!isOpen)}
+                onClick={handleTriggerClick}
                 onKeyDown={handleKeyDown}
-                tabIndex={0}
+                tabIndex={disabled ? -1 : 0}
                 style={{
                     padding: getPadding(isRounded),
                     border: "1px solid #d1d5db",
                     borderRadius: getBorderRadius(isRounded),
                     cursor: disabled ? "not-allowed" : "pointer",
+                    opacity: disabled ? 0.6 : 1,
                     backgroundColor: "#ffffff",
                     display: "flex",
                     justifyContent: "space-between",
@@ -145,13 +170,13 @@ const Dropdown = ({
                         placeholder || "Select an option"
                     )}
                 </p>
-                {isOpen ? (
+                {isDropdownOpen ? (
                     <FontAwesomeIcon icon={faChevronUp} color="#6b7280" />
                 ) : (
                     <FontAwesomeIcon icon={faChevronDown} color="#6b7280" />
                 )}
             </div>
-            {isOpen && (
+            {isDropdownOpen && (
                 <div
                     style={{
                         position: "absolute",

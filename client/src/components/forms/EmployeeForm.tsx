@@ -1,16 +1,19 @@
 "use client";
 
-import { BreadcrumbLink } from "@/src/components/ui/breadcrumbs/BreadcrumbLink";
-import Button from "@/src/components/ui/button";
-import { defaultPositionValues } from "@/src/lib/forms/position/position-form-default-values";
-import { PositionFormFields } from "@/src/lib/forms/position/position-form-field";
+import { defaultEmployeeValues } from "@/src/lib/forms/employee/employee-form-default-values";
+import {
+    EmployeeContactPersonFields,
+    EmployeeFormFields,
+} from "@/src/lib/forms/employee/employee-form-field";
 import { Mode } from "@/src/types/form";
-import { FormData } from "@/src/types/forms/position-form.types";
+import { FormData } from "@/src/types/forms/employee-form.types";
 import { useEffect, useMemo } from "react";
 import { FormProvider, useForm } from "react-hook-form";
+import { BreadcrumbLink } from "../ui/breadcrumbs/BreadcrumbLink";
+import Button from "../ui/button";
 import FormBuilder from "../layout/FormBuilder";
 
-type PositionFormProps = {
+type EmployeeFormProps = {
     mode: Mode;
     title: string;
     initialValues?: Partial<FormData>;
@@ -19,17 +22,17 @@ type PositionFormProps = {
     submitLabel?: string;
 };
 
-const PositionForm = ({
+const EmployeeForm = ({
     mode,
     title,
     initialValues,
     onSubmit,
-    cancelPath = "/position",
+    cancelPath = "/employee",
     submitLabel,
-}: PositionFormProps) => {
+}: EmployeeFormProps) => {
     const isReadOnly = mode === "view";
     const defaultValues: FormData = useMemo(
-        () => defaultPositionValues(initialValues),
+        () => defaultEmployeeValues(initialValues),
         [initialValues]
     );
 
@@ -51,17 +54,31 @@ const PositionForm = ({
         <div className="flex flex-col px-4 gap-y-5 h-full">
             <p className="text-xl font-semibold">{title}</p>
             <form
-                className="flex flex-col gap-y-4 overflow-hidden max-h-screen"
+                className="flex flex-col px-4 gap-y-4 overflow-hidden max-h-screen"
                 autoComplete="off"
                 onSubmit={handleFormSubmit}
             >
-                <div className="w-full bg-white p-4 rounded-lg shadow-md flex flex-col overflow-y-auto max-h-screen min-h-125">
-                    <FormProvider {...methods}>
-                        <FormBuilder
-                            fields={PositionFormFields}
-                            isReadOnly={isReadOnly}
-                        />
-                    </FormProvider>
+                <div className="w-full bg-white p-4 rounded-lg shadow-md flex flex-col gap-y-5 overflow-y-auto max-h-screen min-h-125">
+                    <div className="flex flex-col gap-y-2">
+                        <p className="text-lg font-semibold">
+                            Basic information
+                        </p>
+                        <FormProvider {...methods}>
+                            <FormBuilder
+                                fields={EmployeeFormFields}
+                                isReadOnly={isReadOnly}
+                            />
+                        </FormProvider>
+                    </div>
+                    <div className="flex flex-col gap-y-2">
+                        <p className="text-lg font-semibold">Contact person</p>
+                        <FormProvider {...methods}>
+                            <FormBuilder
+                                fields={EmployeeContactPersonFields}
+                                isReadOnly={isReadOnly}
+                            />
+                        </FormProvider>
+                    </div>
                 </div>
                 <div className="flex flex-row items-center justify-end gap-x-3">
                     <BreadcrumbLink
@@ -69,7 +86,7 @@ const PositionForm = ({
                         bgColor="#dfdfdf"
                         color="#29377E"
                         path={cancelPath}
-                        label="Position"
+                        label="Employees"
                         source="page"
                         className="h-10 min-w-30 rounded-sm flex items-center justify-center"
                     >
@@ -93,4 +110,4 @@ const PositionForm = ({
     );
 };
 
-export default PositionForm;
+export default EmployeeForm;

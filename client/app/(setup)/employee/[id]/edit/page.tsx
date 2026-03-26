@@ -17,7 +17,7 @@ const Page = () => {
         [employeeId]
     );
 
-    useBreadcrumb("View Employee");
+    useBreadcrumb("Edit Employee");
 
     if (!employee) {
         return (
@@ -32,11 +32,15 @@ const Page = () => {
 
     return (
         <EmployeeForm
-            mode="view"
-            title="View employee"
+            mode="edit"
+            title="Update employee"
             initialValues={{
                 email: employee.email,
             }}
+            submitLabel="Update"
+            onSubmit={(data) =>
+                console.log("Update Employee", employee.id, data)
+            }
         />
     );
 };
