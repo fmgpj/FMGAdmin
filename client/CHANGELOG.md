@@ -16,6 +16,8 @@ All notable changes to this project will be documented in this file.
 - Authenticated design for the main component
 - Change department form structure and use reusable component for form builder
 - Separate files for more readability and clean file structure (Department)
+- Change position form structure and use reusable component for form builder
+- Separate files for more readability and clean file structure (Position)
 
 ### 🐛 Fixed
 

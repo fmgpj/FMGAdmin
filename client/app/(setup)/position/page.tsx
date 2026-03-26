@@ -117,7 +117,6 @@ const Page = () => {
                 searchTerm={searchTerm}
                 data={filteredData}
                 columns={[
-                    { key: "id", label: "ID", style: { minWidth: "50px" } },
                     {
                         key: "department_name",
                         label: "Department",
