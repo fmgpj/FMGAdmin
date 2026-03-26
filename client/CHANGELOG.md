@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚀 Added
 - Created form builder for faster build of fields
+- Datepicker component
 
 ### 🔄 Changed
 
