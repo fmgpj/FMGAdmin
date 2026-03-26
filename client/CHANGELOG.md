@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### 🚀 Added
+
+### 🔄 Changed
+
+### 🐛 Fixed
+
+### 🗑️ Removed
+
+## [1.2.1] - 2026-03-27
+
+### 🚀 Added
 - Created form builder for faster build of fields
 - Datepicker component
 - Textarea component
