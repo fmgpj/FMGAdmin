@@ -2,16 +2,13 @@
 
 import { BreadcrumbLink } from "@/src/components/ui/breadcrumbs/BreadcrumbLink";
 import Button from "@/src/components/ui/button";
-import Dropdown from "@/src/components/ui/dropdown";
-import Field from "@/src/components/ui/field";
-import { departments } from "@/src/data/departments";
 import { defaultServiceValues } from "@/src/lib/forms/service/service-form-default-values";
+import { ServiceFormFields } from "@/src/lib/forms/service/service-form-field";
 import { Mode } from "@/src/types/form";
 import { FormData } from "@/src/types/forms/service-form.types";
 import { useEffect, useMemo } from "react";
-import { Controller, FormProvider, useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import FormBuilder from "../layout/FormBuilder";
-import { ServiceFormFields } from "@/src/lib/forms/service/service-form-field";
 
 type ServiceFormProps = {
     mode: Mode;
@@ -31,24 +28,24 @@ const ServiceForm = ({
     submitLabel,
 }: ServiceFormProps) => {
     const isReadOnly = mode === "view";
-        const defaultValues: FormData = useMemo(
-            () => defaultServiceValues(initialValues),
-            [initialValues]
-        );
-    
-        const methods = useForm<FormData>({
-            defaultValues,
-            mode: "onBlur",
-        });
-    
-        useEffect(() => {
-            methods.reset(defaultValues);
-        }, [defaultValues, methods]);
-    
-        const handleFormSubmit = methods.handleSubmit((data) => {
-            if (isReadOnly) return;
-            onSubmit?.(data);
-        });
+    const defaultValues: FormData = useMemo(
+        () => defaultServiceValues(initialValues),
+        [initialValues]
+    );
+
+    const methods = useForm<FormData>({
+        defaultValues,
+        mode: "onBlur",
+    });
+
+    useEffect(() => {
+        methods.reset(defaultValues);
+    }, [defaultValues, methods]);
+
+    const handleFormSubmit = methods.handleSubmit((data) => {
+        if (isReadOnly) return;
+        onSubmit?.(data);
+    });
 
     return (
         <div className="flex flex-col px-4 gap-y-5 h-full">
