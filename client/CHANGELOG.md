@@ -20,6 +20,8 @@ All notable changes to this project will be documented in this file.
 - Separate files for more readability and clean file structure (Position)
 - Change service form structure and use reusable component for form builder
 - Separate files for more readability and clean file structure (Service)
+- Change employee form structure and use reusable component for form builder
+- Separate files for more readability and clean file structure (Employee)
 
 ### 🐛 Fixed
 
