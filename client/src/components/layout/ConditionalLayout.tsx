@@ -47,12 +47,16 @@ export default function ConditionalLayout({
 
     return (
         <QueryClientProvider client={client}>
-            <div className="flex flex-col min-h-screen max-w-7xl mx-auto">
+            <div
+                className={`flex flex-col min-h-screen ${isAuthenticated ? "max-w-7xl mx-auto" : "w-full"}`}
+            >
                 {/* Header and Sidebar only show when authenticated */}
                 {isAuthenticated && <Header />}
                 <main className="flex flex-row grow overflow-hidden gap-x-4">
                     {isAuthenticated && <Sidebar />}
-                    <div className="flex flex-col w-full xl:min-w-10/12 xl:w-10/12 xl:max-w-10/12 h-screen relative">
+                    <div
+                        className={`flex flex-col w-full h-screen relative ${isAuthenticated ? "xl:min-w-10/12 xl:w-10/12 xl:max-w-10/12" : ""}`}
+                    >
                         {isAuthenticated && <Breadcrumbs />}
                         <div
                             className={`w-full h-screen overflow-y-scroll [&::-webkit-scrollbar]:hidden ${isAuthenticated && "pb-17"}`}

@@ -56,13 +56,21 @@ export const BreadcrumbLink = ({
         fullWidth,
     });
 
+    const shouldApplyButtonStyles =
+        variant !== undefined ||
+        bgColor !== undefined ||
+        color !== undefined ||
+        size !== undefined ||
+        isRounded !== undefined ||
+        fullWidth !== undefined;
+
     const buttonClasses = getButtonClassNames(variant);
 
     return (
         <Link
             href={path}
             className={`${buttonClasses} ${className || ""}`}
-            style={buttonStyles}
+            style={shouldApplyButtonStyles ? buttonStyles : undefined}
             onClick={handleClick}
         >
             {children}

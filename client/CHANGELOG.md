@@ -12,6 +12,31 @@ All notable changes to this project will be documented in this file.
 
 ### 🗑️ Removed
 
+## [1.2.1] - 2026-03-27
+
+### 🚀 Added
+- Created form builder for faster build of fields
+- Datepicker component
+- Textarea component
+- Disabled design and functionality for dropdown component
+- Breadcrumb link ui design (button)
+- Hover effect on sidebar links
+
+### 🔄 Changed
+- Authenticated design for the main component
+- Change department form structure and use reusable component for form builder
+- Separate files for more readability and clean file structure (Department)
+- Change position form structure and use reusable component for form builder
+- Separate files for more readability and clean file structure (Position)
+- Change service form structure and use reusable component for form builder
+- Separate files for more readability and clean file structure (Service)
+- Change employee form structure and use reusable component for form builder
+- Separate files for more readability and clean file structure (Employee)
+
+### 🐛 Fixed
+
+### 🗑️ Removed
+
 ## [1.2.0] - 2026-03-10
 
 ### 🚀 Added
