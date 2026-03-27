@@ -2,16 +2,51 @@ import NextAuth from "next-auth";
 import AzureADProvider from "next-auth/providers/azure-ad";
 import GoogleProvider from "next-auth/providers/google";
 
+const env = {
+    googleClientId:
+        process.env.GOOGLE_CLIENT_ID ||
+        process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
+    googleClientSecret:
+        process.env.GOOGLE_CLIENT_SECRET ||
+        process.env.NEXT_PUBLIC_GOOGLE_CLIENT_SECRET,
+    microsoftClientId:
+        process.env.MICROSOFT_CLIENT_ID ||
+        process.env.NEXT_PUBLIC_MICROSOFT_CLIENT_ID,
+    microsoftClientSecret:
+        process.env.MICROSOFT_CLIENT_SECRET ||
+        process.env.NEXT_PUBLIC_MICROSOFT_CLIENT_SECRET,
+    microsoftTenantId:
+        process.env.MICROSOFT_TENANT_ID ||
+        process.env.NEXT_PUBLIC_MICROSOFT_TENANT_ID,
+    nextAuthSecret:
+        process.env.NEXTAUTH_SECRET || process.env.NEXT_PUBLIC_NEXTAUTH_SECRET,
+};
+
+function requireEnv(name: string, value?: string): string {
+    if (!value) {
+        throw new Error(
+            `[next-auth] Missing required environment variable: ${name}`
+        );
+    }
+    return value;
+}
+
 const handler = NextAuth({
     providers: [
         GoogleProvider({
-            clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!,
-            clientSecret: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_SECRET!,
+            clientId: requireEnv("GOOGLE_CLIENT_ID", env.googleClientId),
+            clientSecret: requireEnv(
+                "GOOGLE_CLIENT_SECRET",
+                env.googleClientSecret
+            ),
         }),
         AzureADProvider({
-            clientId: process.env.NEXT_PUBLIC_MICROSOFT_CLIENT_ID!,
-            clientSecret: process.env.NEXT_PUBLIC_MICROSOFT_CLIENT_SECRET!,
-            tenantId: process.env.NEXT_PUBLIC_MICROSOFT_TENANT_ID!,
+            clientId: requireEnv("MICROSOFT_CLIENT_ID", env.microsoftClientId),
+            clientSecret: requireEnv(
+                "MICROSOFT_CLIENT_SECRET",
+                env.microsoftClientSecret
+            ),
+            tenantId: requireEnv("MICROSOFT_TENANT_ID", env.microsoftTenantId),
             authorization: {
                 params: {
                     scope: "openid profile email User.Read",
@@ -80,7 +115,7 @@ const handler = NextAuth({
             }
         },
     },
-    secret: process.env.NEXT_PUBLIC_NEXTAUTH_SECRET,
+    secret: requireEnv("NEXTAUTH_SECRET", env.nextAuthSecret),
     debug: process.env.NODE_ENV === "development",
 });
 
