@@ -12,6 +12,17 @@ All notable changes to this project will be documented in this file.
 
 ### 🗑️ Removed
 
+## [2.0.0] - 2026-04-01
+
+### 🚀 Added
+
+### 🔄 Changed
+
+### 🐛 Fixed
+- Render project locally, add `baseUrl: "./"` in tsconfig.json
+
+### 🗑️ Removed
+
 ## [1.2.2] - 2026-03-28
 
 ### 🚀 Added

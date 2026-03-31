@@ -1,7 +1,7 @@
 "use client";
 
-import DepartmentForm from "@/src/components/forms/DepartmentForm";
-import { useBreadcrumb } from "@/src/hooks/useBreadcrumbs";
+import DepartmentForm from "@src/components/forms/DepartmentForm";
+import { useBreadcrumb } from "@src/hooks/useBreadcrumbs";
 import { departments } from "@data/departments";
 import { useParams } from "next/navigation";
 import { useMemo } from "react";
