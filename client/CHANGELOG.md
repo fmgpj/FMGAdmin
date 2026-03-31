@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 ### 🔄 Changed
 
 ### 🐛 Fixed
+- Render project locally, add `baseUrl: "./"` in tsconfig.json
 
 ### 🗑️ Removed
 
