@@ -12,6 +12,17 @@ All notable changes to this project will be documented in this file.
 
 ### 🗑️ Removed
 
+## [2.0.1] - 2026-04-01
+
+### 🚀 Added
+
+### 🔄 Changed
+- Renamed my environment variables for live
+
+### 🐛 Fixed
+
+### 🗑️ Removed
+
 ## [2.0.0] - 2026-04-01
 
 ### 🚀 Added
