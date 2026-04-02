@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 - add startup validator for my api/auth so production fails with a clear message
 
 ### 🔄 Changed
+- Removed the baseUrl in tsconfig file
 
 ### 🐛 Fixed
 
