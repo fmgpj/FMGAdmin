@@ -40,6 +40,8 @@ function validateAuthEnvironment(): {
 
     if (process.env.NODE_ENV === "production") {
         const nextAuthUrl = process.env.NEXTAUTH_URL?.trim();
+        const isHostedProduction =
+            process.env.VERCEL === "1" || Boolean(process.env.VERCEL_URL);
 
         if (!nextAuthUrl) {
             throw new Error(
@@ -47,9 +49,15 @@ function validateAuthEnvironment(): {
             );
         }
 
-        if (nextAuthUrl.includes("localhost")) {
+        if (isHostedProduction && nextAuthUrl.includes("localhost")) {
             throw new Error(
                 "[Auth Config Error] NEXTAUTH_URL points to localhost in production"
+            );
+        }
+
+        if (!isHostedProduction && nextAuthUrl.includes("localhost")) {
+            console.warn(
+                "[Auth Config Warning] NEXTAUTH_URL uses localhost in local production build. This is expected locally but must be a public domain in deployment."
             );
         }
     }

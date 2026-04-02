@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 - Removed the baseUrl in tsconfig file
 
 ### 🐛 Fixed
+- Resolved build error on route.ts
 
 ### 🗑️ Removed
 
