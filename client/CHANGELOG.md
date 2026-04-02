@@ -12,6 +12,19 @@ All notable changes to this project will be documented in this file.
 
 ### 🗑️ Removed
 
+## [2.0.2] - 2026-04-03
+
+### 🚀 Added
+- add startup validator for my api/auth so production fails with a clear message
+
+### 🔄 Changed
+- Removed the baseUrl in tsconfig file
+
+### 🐛 Fixed
+- Resolved build error on route.ts
+
+### 🗑️ Removed
+
 ## [2.0.1] - 2026-04-01
 
 ### 🚀 Added
