@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### 🚀 Added
+
+### 🔄 Changed
+
+### 🐛 Fixed
+
+### 🗑️ Removed
+
+## [2.0.2] - 2026-04-03
+
+### 🚀 Added
 - add startup validator for my api/auth so production fails with a clear message
 
 ### 🔄 Changed
