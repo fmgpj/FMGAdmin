@@ -7,6 +7,16 @@ All notable changes to this project will be documented in this file.
 ### 🚀 Added
 
 ### 🔄 Changed
+
+### 🐛 Fixed
+
+### 🗑️ Removed
+
+## [2.0.3] - 2026-04-04
+
+### 🚀 Added
+
+### 🔄 Changed
 - Increase bottom padding in small devices
 
 ### 🐛 Fixed
