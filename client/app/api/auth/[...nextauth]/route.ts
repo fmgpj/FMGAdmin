@@ -2,16 +2,81 @@ import NextAuth from "next-auth";
 import AzureADProvider from "next-auth/providers/azure-ad";
 import GoogleProvider from "next-auth/providers/google";
 
+function readRequiredEnv(name: string): string {
+    const value = process.env[name];
+
+    if (!value || !value.trim()) {
+        throw new Error(
+            `[Auth Config Error] Missing required environment variable: ${name}`
+        );
+    }
+
+    const trimmedValue = value.trim();
+
+    // Some hosting UIs tempt users to include quotes. Normalize that safely.
+    const hasWrappedQuotes =
+        (trimmedValue.startsWith('"') && trimmedValue.endsWith('"')) ||
+        (trimmedValue.startsWith("'") && trimmedValue.endsWith("'"));
+
+    return hasWrappedQuotes ? trimmedValue.slice(1, -1) : trimmedValue;
+}
+
+function validateAuthEnvironment(): {
+    googleClientId: string;
+    googleClientSecret: string;
+    azureClientId: string;
+    azureClientSecret: string;
+    azureTenantId: string;
+    nextAuthSecret: string;
+} {
+    const env = {
+        googleClientId: readRequiredEnv("GOOGLE_CLIENT_ID"),
+        googleClientSecret: readRequiredEnv("GOOGLE_CLIENT_SECRET"),
+        azureClientId: readRequiredEnv("AZURE_AD_CLIENT_ID"),
+        azureClientSecret: readRequiredEnv("AZURE_AD_CLIENT_SECRET"),
+        azureTenantId: readRequiredEnv("AZURE_AD_TENANT_ID"),
+        nextAuthSecret: readRequiredEnv("NEXTAUTH_SECRET"),
+    };
+
+    if (process.env.NODE_ENV === "production") {
+        const nextAuthUrl = process.env.NEXTAUTH_URL?.trim();
+        const isHostedProduction =
+            process.env.VERCEL === "1" || Boolean(process.env.VERCEL_URL);
+
+        if (!nextAuthUrl) {
+            throw new Error(
+                "[Auth Config Error] Missing required environment variable: NEXTAUTH_URL (required in production)"
+            );
+        }
+
+        if (isHostedProduction && nextAuthUrl.includes("localhost")) {
+            throw new Error(
+                "[Auth Config Error] NEXTAUTH_URL points to localhost in production"
+            );
+        }
+
+        if (!isHostedProduction && nextAuthUrl.includes("localhost")) {
+            console.warn(
+                "[Auth Config Warning] NEXTAUTH_URL uses localhost in local production build. This is expected locally but must be a public domain in deployment."
+            );
+        }
+    }
+
+    return env;
+}
+
+const authEnv = validateAuthEnvironment();
+
 const handler = NextAuth({
     providers: [
         GoogleProvider({
-            clientId: process.env.GOOGLE_CLIENT_ID!,
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+            clientId: authEnv.googleClientId,
+            clientSecret: authEnv.googleClientSecret,
         }),
         AzureADProvider({
-            clientId: process.env.MICROSOFT_CLIENT_ID!,
-            clientSecret: process.env.MICROSOFT_CLIENT_SECRET!,
-            tenantId: process.env.MICROSOFT_TENANT_ID!,
+            clientId: authEnv.azureClientId,
+            clientSecret: authEnv.azureClientSecret,
+            tenantId: authEnv.azureTenantId,
             authorization: {
                 params: {
                     scope: "openid profile email User.Read",
@@ -80,7 +145,7 @@ const handler = NextAuth({
             }
         },
     },
-    secret: process.env.NEXTAUTH_SECRET,
+    secret: authEnv.nextAuthSecret,
     debug: process.env.NODE_ENV === "development",
 });
 
