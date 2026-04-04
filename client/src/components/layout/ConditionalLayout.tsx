@@ -59,7 +59,7 @@ export default function ConditionalLayout({
                     >
                         {isAuthenticated && <Breadcrumbs />}
                         <div
-                            className={`w-full h-screen overflow-y-scroll [&::-webkit-scrollbar]:hidden ${isAuthenticated && "pb-17"}`}
+                            className={`w-full h-screen overflow-y-scroll [&::-webkit-scrollbar]:hidden ${isAuthenticated && "pb-34 xl:pb-17"}`}
                         >
                             {children}
                         </div>
